@@ -3,7 +3,7 @@
 //  generates the calendar for quick calendar
 //
 //  Version 0.1 - Dylan, 11am, 1/23/17
-//  - Loads canvas from quickcalendar.html
+//  - Loads canvas from index.html
 //  - Makes it 2d
 // --------------------------------------------------------------------
 
