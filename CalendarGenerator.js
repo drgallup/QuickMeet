@@ -19,7 +19,7 @@ var width = myCanvas.width,
 
 //Predefined number of rows and columns
 var columns = 7,
-	rows = 24;
+	rows = 12;
 
 //Gets size of each cell
 var tileWidth = width / columns,
