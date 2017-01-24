@@ -29,12 +29,12 @@ var context = myCanvas.getContext("2d");
 
 //Draws grid
 function drawGrid(){
-	for (var x = 0; x<=width; x+=tileWidth){
+	for (var x = 0; x-1<=width; x+=tileWidth){
 		context.moveTo(x,0);
 		context.lineTo(x,height);
 	}
 
-	for (var y = 0; y<=height; y+=tileHeight){
+	for (var y = 0; y-1<=height; y+=tileHeight){
 		context.moveTo(0,y);
 		context.lineTo(width,y);
 	}
