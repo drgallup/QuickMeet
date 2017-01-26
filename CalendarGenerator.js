@@ -2,7 +2,7 @@
 //  CalendarGenerator.js
 //  generates the calendar for quick calendar
 //
-//  Version 0.4 - Nathan, 4pm, 1/25/17
+//  Version 0.3 - Nathan, 4pm, 1/25/17
 //  - Loads canvas from index.html
 //  - Makes it 2d
 //  - Draws grid
