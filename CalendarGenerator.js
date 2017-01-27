@@ -2,10 +2,11 @@
 //  CalendarGenerator.js
 //  generates the calendar for quick calendar
 //
-//  Version 0.2 - Nathan, 5pm, 1/23/17
+//  Version 0.3 - Nathan, 4pm, 1/25/17
 //  - Loads canvas from index.html
 //  - Makes it 2d
 //  - Draws grid
+//  - Indents Calendar for room for times
 // --------------------------------------------------------------------
 
 // get the canvas we are working on
@@ -14,7 +15,7 @@ var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
 
 // Gets canvas width and height
-var width = myCanvas.width,
+var width = myCanvas.width-100,
     height = myCanvas.height;
 
 //Predefined number of rows and columns
@@ -25,21 +26,34 @@ var columns = 7,
 var tileWidth = width / columns,
 	tileHeight = height / rows;
 
-var context = myCanvas.getContext("2d");
+function findTime(test){
+	var foo = Math.round(test / tileHeight)+8;
+	if(foo<12){		
+		return foo +"AM";
+	}
+	if(foo == 12){
+		return foo + "PM";
+	}
+	else{
+		return foo-12 + "PM";
+	}
+}
 
 //Draws grid
 function drawGrid(){
 	for (var x = 0; x-1<=width; x+=tileWidth){
-		context.moveTo(x,0);
-		context.lineTo(x,height);
+		ctx.moveTo(x+100,0);
+		ctx.lineTo(x+100,height);
 	}
 
 	for (var y = 0; y-1<=height; y+=tileHeight){
-		context.moveTo(0,y);
-		context.lineTo(width,y);
+		ctx.moveTo(100,y);
+		ctx.lineTo(width+100,y);
+		ctx.font = "14px Arial";
+		ctx.fillText(findTime(y),0,y+tileHeight);
 	}
-	context.strokeStyle = "black";
-	context.stroke();
+	ctx.strokeStyle = "black";
+	ctx.stroke();
 }
 
 drawGrid();
