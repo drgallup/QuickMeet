@@ -44,6 +44,8 @@ function drawGrid(){
 	for (var x = 0; x-1<=width; x+=tileWidth){
 		ctx.moveTo(x+100,0);
 		ctx.lineTo(x+100,height);
+		ctx.fillStyle = "blue";
+		ctx.fill();
 	}
 
 	for (var y = 0; y-1<=height; y+=tileHeight){
