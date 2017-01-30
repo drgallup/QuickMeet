@@ -10,19 +10,19 @@
 // // --------------------------------------------------------------------
 
 
-var canvas = document.getElementById('myCanvas'),
-    canLeft = canvas.offsetLeft,
-    canTop = canvas.offsetTop,
-    context = canvas.getContext('2d'),
+var c = document.getElementById('myCanvas'),
+    canLeft = c.offsetLeft,
+    canTop = c.offsetTop,
+    ctx = c.getContext('2d'),
     element = [];
 
-var canvas, context, startX, endX, startY, endY;
+var canvas, startX, endX, startY, endY;
 var mouseIsDown = 0;
 
 function init(){
-	canvas.addEventListener('mousedown', mouseDown, false);
-	canvas.addEventListener('mousemove', mouseMove, false);
-	canvas.addEventListener('mouseup', mouseUp, false);
+	c.addEventListener('mousedown', mouseDown, false);
+	c.addEventListener('mousemove', mouseMove, false);
+	c.addEventListener('mouseup', mouseUp, false);
 }
 
 function getMousePos(canvas, evt){
@@ -70,15 +70,15 @@ function drawSquare() {
     var width = Math.abs(w);
     var height = Math.abs(h);
                
-    context.beginPath();
-    context.rect(startX + offsetX, startY + offsetY, width, height);
-    context.fillStyle = "rgba(128,0,0,0.5";
-    context.fill();
-    context.lineWidth = 1;
+    ctx.beginPath();
+    ctx.rect(startX + offsetX, startY + offsetY, width, height);
+    ctx.fillStyle = "rgba(128,0,0,0.5";
+    ctx.fill();
+    ctx.lineWidth = 1;
 }
 
 function getMousePos(canvas, evt) {
-    var rect = canvas.getBoundingClientRect();
+    var rect = c.getBoundingClientRect();
     return {
         x: evt.clientX - rect.left,
         y: evt.clientY - rect.top
