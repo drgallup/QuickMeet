@@ -16,7 +16,7 @@ canvas {
  }
 
 /* for implementing grid of clickable boxes over the canvas */
-.grid { margin:1em auto; border-collapse:collapse }
+.grid { border-collapse:collapse }
 .grid td {
     cursor:pointer;
     width:100px; height:27px;
