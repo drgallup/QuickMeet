@@ -9,6 +9,11 @@
 // //  -*BUG* Time becomes more darker with each successive box
 // // --------------------------------------------------------------------
 
+var evenclick = true;
+var x1;
+var y1;
+var x2;
+var y2;
 
 var c = document.getElementById('myCanvas'),
     canLeft = c.offsetLeft,
@@ -16,73 +21,31 @@ var c = document.getElementById('myCanvas'),
     ctx = c.getContext('2d'),
     element = [];
 
-var canvas, startX, endX, startY, endY;
-var mouseIsDown = 0;
-
-function init(){
-	c.addEventListener('mousedown', mouseDown, false);
-	c.addEventListener('mousemove', mouseMove, false);
-	c.addEventListener('mouseup', mouseUp, false);
+can.onmousedown = function(event) {
+  // saves first click, changes state
+  if(evenclick){
+    x1 = event.pageX - canLeft;
+    y1 = event.pageY - canTop;
+    evenclick = false;
+  }
 }
 
-function getMousePos(canvas, evt){
-	return{
-		x: evt.pageX - canLeft,
-		y: evt.pageY = canTop
-	};
+can.onmouseup = function(e){
+  // saves second click, changes state
+  if(!evenclick){
+    x2 = e.pageX - canLeft;
+    y2 = e.pageY - canTop;
+    evenclick = true;
+    alert("Width: " + (x2-x1) + " Length: " + (y2-y1) + " x1: " + x1 + " y1: " + y1 + " x2: " + x2 + " y2: " + y2);
+  }
+  
+  
 }
 
-function mouseUp(eve) {
-    if (mouseIsDown !== 0) {
-        mouseIsDown = 0;
-        var pos = getMousePos(canvas, eve);
-        endX = pos.x;
-        endY = pos.y;
-        drawSquare(); 
-    }
-    drawGrid();
+function findLocation (x1, y1, x2, y2){
+  // figures out which hours on the calendar have been selected
+  
+  
 }
 
-function mouseDown(eve) {
-    mouseIsDown = 1;
-    var pos = getMousePos(canvas, eve);
-    startX = endX = pos.x;
-    startY = endY = pos.y;
-    drawSquare(); 
-}
 
-function mouseMove(eve) {
-
-    if (mouseIsDown !== 0) {
-        var pos = getMousePos(canvas, eve);
-        endX = pos.x;
-        endY = pos.y;
-        drawSquare();
-    }
-}
-
-function drawSquare() {
-    // creating a square
-    var w = endX - startX;
-    var h = endY - startY;
-    var offsetX = (w < 0) ? w : 0;
-    var offsetY = (h < 0) ? h : 0;
-    var width = Math.abs(w);
-    var height = Math.abs(h);
-               
-    ctx.beginPath();
-    ctx.rect(startX + offsetX, startY + offsetY, width, height);
-    ctx.fillStyle = "rgba(128,0,0,0.5";
-    ctx.fill();
-    ctx.lineWidth = 1;
-}
-
-function getMousePos(canvas, evt) {
-    var rect = c.getBoundingClientRect();
-    return {
-        x: evt.clientX - rect.left,
-        y: evt.clientY - rect.top
-    };
-}
-
-init();
