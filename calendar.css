@@ -12,6 +12,7 @@
 }
 
 canvas {
+  position:relative;
   background-color: #f4fdff;
  }
 
