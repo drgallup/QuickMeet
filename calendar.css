@@ -21,7 +21,7 @@ canvas {
     cursor:pointer;
     width:100px; height:27px;
     border:1px solid #ccc;
-    text-align:center;
+    /*text-align:center;*/
     font-family:sans-serif; font-size:13px
 }
 .grid td.clicked {
