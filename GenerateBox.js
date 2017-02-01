@@ -12,3 +12,34 @@
 // //  Version 0.1 - Isaac, 1/30/17
 // //  -Add event listener on Canvas for click
 // // --------------------------------------------------------------------
+
+function changeColor(evt){
+  var clickedOn = evt.target;
+  // for HTML
+  clickedOn.style.backgroundColor = '#f00';
+
+  // for SVG
+  clickedOn.setAttribute('fill','red');
+}
+mySquare.addEventListener('click',changeColor,false);
+
+
+var lastClicked;
+var grid = clickableGrid(700,100,function(el,row,col,i){
+
+function clickableGrid( rows, cols, callback ){
+  var i=0;
+  var grid = document.createElement('table');
+  grid.className = 'grid';
+  for (var r=0;r<rows;++r){
+    var tr = grid.appendChild(document.createElement('tr'));
+    for (var c=0;c<cols;++c){
+      var cell = tr.appendChild(document.createElement('td'));
+      cell.innerHTML = ++i;
+      cell.addEventListener('click',(function(el,r,c,i){
+        return function(){ callback(el,r,c,i); }
+       })(cell,r,c,i),false);
+    }
+  }
+  return grid;
+}
