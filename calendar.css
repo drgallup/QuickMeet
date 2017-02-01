@@ -14,3 +14,17 @@
 canvas {
   background-color: #f4fdff;
  }
+
+/* for implementing grid of clickable boxes over the canvas */
+.grid { margin:1em auto; border-collapse:collapse }
+.grid td {
+    cursor:pointer;
+    width:100px; height:27px;
+    border:1px solid #ccc;
+    text-align:center;
+    font-family:sans-serif; font-size:13px
+}
+.grid td.clicked {
+    background-color:yellow;
+    font-weight:bold; color:red;
+}
