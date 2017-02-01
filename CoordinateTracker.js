@@ -9,6 +9,14 @@
 // //  -*BUG* Time becomes more darker with each successive box
 // // --------------------------------------------------------------------
 
+var evenclick = true;
+var x1;
+var y1;
+var x2;
+var y2;
+var day = [ [100, 200], [200, 300],
+            [300, 400], [400, 500],
+            [500, 600], [600, 700], [700, 800] ];
 
 var evenclick = true;
 var x1;
