@@ -2,9 +2,21 @@
 // //  CoordinateTracker.js
 // //  Track the x,y coordinate when mouse click event happen on canvas
 // //
-// //  Version 0.1 - Kevin, 6, 1/24/17
-// //  -Add event listener on Canvas for click
+// //  Version 0.2 - Nathan, 10pm, 1/29/17
+// //  -Add event listener on Canvas for on mouse click, on mouse movement, 
+// //   and on mouse release
+// //  -Creates live rendering box when you click and drag
+// //  -*BUG* Time becomes more darker with each successive box
 // // --------------------------------------------------------------------
+
+var evenclick = true;
+var x1;
+var y1;
+var x2;
+var y2;
+var day = [ [100, 200], [200, 300],
+            [300, 400], [400, 500],
+            [500, 600], [600, 700], [700, 800] ];
 
 var evenclick = true;
 var x1;
@@ -50,6 +62,4 @@ function findLocation (){
       alert("Day " + i + " selected!");
     }
   }
-  
-  
 }
