@@ -12,12 +12,14 @@
 }
 
 canvas {
+  style="z-index: 1;
   background-color: #f4fdff;
  }
 
 /* for implementing grid of clickable boxes over the canvas */
 .grid { margin:auto auto auto 6em; border-collapse:collapse }
 .grid td {
+    style="z-index: 2;
     cursor:pointer;
     width:100px; height:27px;
     border:1px solid #ccc;
