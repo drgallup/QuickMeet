@@ -13,6 +13,7 @@
 
 canvas {
   style="z-index: 1;
+  position: absolute;
   background-color: #f4fdff;
  }
 
@@ -20,6 +21,7 @@ canvas {
 .grid { margin:auto auto auto 6em; border-collapse:collapse }
 .grid td {
     style="z-index: 2;
+    position: absolute;
     cursor:pointer;
     width:100px; height:27px;
     border:1px solid #ccc;
