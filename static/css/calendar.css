@@ -12,9 +12,9 @@
 * {
    margin: 5;
    padding: 0;
-   background-color: --background;
+   background-color: var(--background);
 }
 
 canvas {
-  background-color: --background;
+  background-color: var(--background);
  }
