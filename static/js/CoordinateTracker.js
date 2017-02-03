@@ -79,9 +79,13 @@ function getMousePos(canvas, evt) {
 
 function findLocation (){
   // figures out which hours on the calendar have been selected
+  var selected;
+  var dayTemp;
+  var hourTemp;
   for (var i = 0; i<day.length; i++){
-    if( day[i][0] < startX && startX < day[i][1] ){
-      alert("Day " + i + " selected!");
+    if( day[i][0] < startX && endX < day[i][1] ){
+      dayTemp.push(i);
     }
+    alert(dayTemp);
   }
 }
