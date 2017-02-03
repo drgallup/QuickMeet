@@ -115,8 +115,16 @@ function findLocation (){
       hourTemp.push(timeCalc(i));
     }
   }
-  alert(hourTemp);
+  //alert(hourTemp);
   //alert(dayTemp);
+  
+  var timeStart = hourTemp[0]-100;
+  var timeEnd = hourTemp[hourTemp.length-1];
+  var dayStart = dayMap(dayTemp[0]);
+  var dayEnd = dayMap(dayTemp[dayTemp.length-1]);
+  
+  alert("Busy from " + timeStart + " to " + timeEnd + " " + dayStart + " through " + dayEnd);
+  
   // add call to database here!
 }
 
@@ -124,3 +132,26 @@ function findLocation (){
 function timeCalc(x){
   return (x*100 + 800);
 }
+
+// maps the days to strings
+function dayMap(x){
+  switch(x){
+    case 0:
+      return "Sunday";
+    case 1:
+      return "Monday";
+    case 2:
+      return "Tuesday";
+    case 3:
+      return "Wednesday";
+    case 4:
+      return "Thursday";
+    case 5:
+      return "Friday";
+    case 6:
+      return "Saturday";
+    default:
+      return "Error: Invalid Day";
+  }
+}
+      
