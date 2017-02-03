@@ -3,14 +3,36 @@
     The css file for our webpage.
     
     Version 0.1 - 1/30/2017 - Removed the default margin and padding from the browser.
+    Version 0.2 - 2/3/2017 - Centered everything and added global color variable set for easy editing.
 */
 
+:root{
+    --background: #f4fdff;
+}
+
 * {
-   margin: 0;
    padding: 0;
-   background-color: #f4fdff;
+   background-color: var(--background);
+   text-align: center;
+}
+
+text {
+       margin: 5;
+}
+
+h1 {
+    font-size: 20;
 }
 
 canvas {
-  background-color: #f4fdff;
+  margin: 5;
+  background-color: var(--background);
  }
+
+.header {
+    empty-cells:show;
+    table-layout: fixed;
+    width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
