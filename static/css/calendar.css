@@ -1,0 +1,16 @@
+/*
+    calendar.css
+    The css file for our webpage.
+    
+    Version 0.1 - 1/30/2017 - Removed the default margin and padding from the browser.
+*/
+
+* {
+   margin: 5;
+   padding: 0;
+   background-color: #f4fdff;
+}
+
+canvas {
+  background-color: #f4fdff;
+ }
