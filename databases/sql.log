@@ -53,3 +53,24 @@ CREATE TABLE auth_cas(
     renew CHAR(1)
 );
 success!
+timestamp: 2017-02-04T20:31:30.407560
+CREATE TABLE events(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    startTime INTEGER,
+    endTime INTEGER,
+    days TEXT
+);
+success!
+timestamp: 2017-02-04T20:31:30.461749
+CREATE TABLE users(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    url TEXT,
+    events TEXT
+);
+success!
+timestamp: 2017-02-04T20:48:34.677209
+CREATE TABLE team(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    teamMember TEXT
+);
+success!

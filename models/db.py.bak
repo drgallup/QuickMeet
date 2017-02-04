@@ -141,7 +141,7 @@ db.define_table('users',
                 )
 
 db.define_table('team',
-                Field('teamMember', 'text'))
+                Field('member', 'text'))
                 
 # -------------------------------------------------------------------------
 # after defining tables, uncomment below to enable auditing
