@@ -15,3 +15,4 @@ Nathan, 10am 2/3/17, Ver. 0.4 CalendarGenerator.js - fixed time colors
 					 
 Dylan, 1pm 2/3/17, Ver. 0.5 - calendar.css - added centering and global variables to css. 
 
+Dylan, 4pm 2/3/17, Ver. 0.6 - CoordinateTracker.js - detects and alerts day and time range that the user has selected.
