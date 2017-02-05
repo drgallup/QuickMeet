@@ -1,19 +1,20 @@
 {{extend 'layout.html'}}
 
-    <p>QuickMeet</p>
+    <h1>QuickMeet</h1>
 
     <!-- Lists days over grid-->
 
   <link rel="stylesheet" href="{{=URL('static','css/calendar.css')}}">
-    <table style="margin-left:100px; width: 700px" >
+    <table class="header">
       <tr>
+        <td></td>
+        <td>Sunday</td>
         <td>Monday</td>
         <td>Tuesday</td>
         <td>Wednesday</td>
         <td>Thursday</td>
         <td>Friday</td>
         <td>Saturday</td>
-        <td>Sunday</td>
       </tr>
     </table>  
 
