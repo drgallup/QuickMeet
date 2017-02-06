@@ -76,6 +76,7 @@ def api():
             raise HTTP(parser.status,parser.error)
 
     #Return status and update database 
+    #All POST/PUT/DELETE are done by matching primary key of the table
     def POST(table_name,**vars):
         return db[table_name].validate_and_insert(**vars)
     def PUT(table_name,record_id,**vars):
