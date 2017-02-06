@@ -61,11 +61,12 @@ def call():
     return service()
 
 
-#RESTFUL API
+#RESTFUL API responsible to database transaction
 #It does not require auth()
 @request.restful()
 def api():
     response.view = 'generic.'+request.extension
+    #Return GET request result given the query
     def GET(*args,**vars):
         patterns = 'auto'
         parser = db.parse_as_rest(patterns,args,vars)
@@ -73,6 +74,8 @@ def api():
             return dict(content=parser.response)
         else:
             raise HTTP(parser.status,parser.error)
+
+    #Return status and update database 
     def POST(table_name,**vars):
         return db[table_name].validate_and_insert(**vars)
     def PUT(table_name,record_id,**vars):

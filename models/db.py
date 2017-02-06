@@ -131,17 +131,20 @@ auth.settings.reset_password_requires_verification = True
 db.define_table('events',
                 Field('startTime','integer'),
                 Field('endTime', 'integer'),
-                Field('days', 'text')
+                Field('days', 'list:string')
                )
 
 #URL will be use as the primary key to restrict insertion
+#User can own multiple event and user can also inherit events throughout group
 db.define_table('users', 
                 Field('url', 'text'),
-                Field('events', 'text')
+                Field('events', 'list:string')
                 )
 
+#Table for team with their member stored as list
+#Team links individual member together by its userId
 db.define_table('team',
-                Field('teamMember', 'text'))
+        Field('teamMember', 'list:string'))
                 
 # -------------------------------------------------------------------------
 # after defining tables, uncomment below to enable auditing
