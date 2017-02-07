@@ -37,8 +37,12 @@ function hourChange(){
   //alert(hour);
 }
 
+var dayNum;
+var hourHeight
 
 function mouseUp(eve) {
+    
+    
     if (mouseIsDown != false) {
         mouseIsDown = false;
         var pos = getMousePos(canvas, eve);
@@ -49,6 +53,8 @@ function mouseUp(eve) {
     ctx.clearRect(0,0,c.width,c.height);
     drawGrid();
     findLocation();
+    drawBox(dayNum, hourHeight);
+    
 }
 
 function mouseDown(eve) {
@@ -81,6 +87,7 @@ function drawSquare() {
     ctx.fillStyle = "rgba(128,0,0,1)";
     ctx.fillRect(startX + offsetX, startY + offsetY, width, height);
     ctx.lineWidth = 1;
+   
 }
 
 function getMousePos(canvas, evt) {
@@ -108,24 +115,29 @@ function findLocation (){
   // figure out which hours were selected
   for (var i = 0; i<hour.length-1; i++){
     if( hour[i] < startY && startY < hour[i+1] ){
-      hourTemp.push(timeCalc(i));
+      hourTemp.push(i);
     }else if( startY < hour[i] && hour[i+1] < endY ){
-      hourTemp.push(timeCalc(i));
+      hourTemp.push(i);
     }else if( hour[i] < endY && endY < hour[i+1] ){
-      hourTemp.push(timeCalc(i));
+      hourTemp.push(i);
     }
   }
   //alert(hourTemp);
   //alert(dayTemp);
   
-  var timeStart = hourTemp[0]-100;
-  var timeEnd = hourTemp[hourTemp.length-1];
+  var timeStart = timeCalc(hourTemp[0])-100;
+  var timeEnd = timeCalc(hourTemp[hourTemp.length-1])+100;
   var dayStart = dayMap(dayTemp[0]);
   var dayEnd = dayMap(dayTemp[dayTemp.length-1]);
   
   alert("Busy from " + timeStart + " to " + timeEnd + " " + dayStart + " through " + dayEnd);
   
-  // add call to database here!
+  //return values to generate boxes
+  dayNum = dayTemp;
+  hourHeight = hourTemp;
+  return dayNum, hourHeight;
+  
+    // add call to database here!
 }
 
 // maps the hour selected to the time displayed
@@ -154,4 +166,3 @@ function dayMap(x){
       return "Error: Invalid Day";
   }
 }
-      
