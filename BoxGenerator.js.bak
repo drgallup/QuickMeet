@@ -1,0 +1,11 @@
+function drawBox(dayNum, hourHeight){
+    var height = tileHeight;
+    var width  = dayNum.length*tileWidth;
+        
+    height = height*hourHeight.length;
+    //alert(width);    
+    //alert("x coordinate is " + dayNum[0]*tileWidth+tileWidth + "y coordinate is " + hourHeight[0]*tileHeight + "width is " + width + "height is " + height);
+        
+    ctx.fillStyle = "rgba(128,0,0,0.5)";
+    ctx.fillRect(dayNum[0]*tileWidth+tileWidth,hourHeight[0]*tileHeight, width, height);
+}
