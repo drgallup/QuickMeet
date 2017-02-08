@@ -138,11 +138,13 @@ db.define_table('events',
 #URL will be use as the primary key to restrict insertion
 db.define_table('users', 
                 Field('url', 'text'),
-                Field('events', 'text')
+                Field('events', 'list:integer')
                 )
 
+#Each team owns one or more member saved as a list
+#Foreign key points to table users
 db.define_table('team',
-                Field('teamMember', 'text')
+        Field('teamMember', 'list:integer')
                )
 # -------------------------------------------------------------------------
 # after defining tables, uncomment below to enable auditing
