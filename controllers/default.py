@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import json
 # this file is released under public domain and you can use without limitations
 
 # -------------------------------------------------------------------------
@@ -59,3 +60,29 @@ def call():
     supports xml, json, xmlrpc, jsonrpc, amfrpc, rss, csv
     """
     return service()
+
+
+#RESTFUL API
+#It does not require auth()
+@request.restful()
+def api():
+    response.view = 'generic.'+request.extension
+    
+    def GET(*args,**vars):
+        uid = args[0]
+        data = db(db.events.username == uid).select()
+        return json.dumps([[r.username, r.startTime, r.endTime, r.days] for r in data])
+
+    def POST(*args, **vars):
+        uid = args[0]
+        s = vars["dayStart"]
+        t = vars["dayEnd"]
+        for i in range(int(s),int(t)+1):
+            db.events.insert(username = uid, startTime = vars['timeStart'], endTime = vars['timeEnd'], days = i )
+
+        return "success saving data!"
+    def PUT(table_name,record_id,**vars):
+        return db(db[table_name]._id==record_id).update(**vars)
+    def DELETE(table_name,record_id):
+        return db(db[table_name]._id==record_id).delete()
+    return dict(GET=GET, POST=POST, PUT=PUT, DELETE=DELETE)
