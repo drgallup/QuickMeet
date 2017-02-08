@@ -132,7 +132,7 @@ db.define_table('events',
                 Field('username','string',requires=IS_NOT_EMPTY()),
                 Field('startTime','integer'),
                 Field('endTime', 'integer'),
-                Field('days', 'integer')
+                Field('days', 'list:integer')
                )
 
 #URL will be use as the primary key to restrict insertion

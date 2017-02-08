@@ -77,9 +77,12 @@ def api():
         uid = args[0]
         s = vars["dayStart"]
         t = vars["dayEnd"]
+        duration = []
         for i in range(int(s),int(t)+1):
-            db.events.insert(username = uid, startTime = vars['timeStart'], endTime = vars['timeEnd'], days = i )
-
+            #db.events.insert(username = uid, startTime = vars['timeStart'], endTime = vars['timeEnd'], days = i )
+            duration.append(i)
+        #temp = str(duration[1:-1])
+        db.events.insert(username =uid, startTime = vars['timeStart'], endTime = vars['timeEnd'], days = duration)
         return "success saving data!"
     def PUT(table_name,record_id,**vars):
         return db(db[table_name]._id==record_id).update(**vars)
