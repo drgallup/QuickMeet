@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------
-// //  CoordinateTracker.js
-// //  Track the x,y coordinate when mouse click event happen on canvas
-// //
-// //  Version 0.5 - Nathan, 10am, 2/3/17
-// //  -Add event listener on Canvas for on mouse click, on mouse movement, 
-// //   and on mouse release
-// //  -Creates live rendering box when you click and drag
-// // --------------------------------------------------------------------
 var day = [ 100, 200,
             300, 400,
             500, 600, 
@@ -127,16 +118,25 @@ function findLocation (){
   
   var timeStart = timeCalc(hourTemp[0])-100;
   var timeEnd = timeCalc(hourTemp[hourTemp.length-1])+100;
+
   var dayStart = dayMap(dayTemp[0]);
   var dayEnd = dayMap(dayTemp[dayTemp.length-1]);
+
   
   alert("Busy from " + timeStart + " to " + timeEnd + " " + dayStart + " through " + dayEnd);
-  
+  //post
+    
+  post_data("/QuickMeet/default/api/username.json", timeStart, timeEnd, dayStart, dayEnd);
+  get_data("/QuickMeet/default/api/username.json");
+
+
+
   //return values to generate boxes
   dayNum = dayTemp;
   hourHeight = hourTemp;
   return dayNum, hourHeight;
   
+
     // add call to database here!
 }
 
@@ -165,4 +165,20 @@ function dayMap(x){
     default:
       return "Error: Invalid Day";
   }
+    
+}
+
+function post_data(URL, tStart, tEnd, dStart, dEnd){
+    var x = new XMLHttpRequest();
+    x.open('POST', URL, false);
+    x.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    x.send("timeStart=" + tStart + "&timeEnd=" + tEnd + "&dayStart=" + dStart + "&dayEnd=" + dEnd);
+    alert(x.responseText);
+}
+
+    function get_data(URL){
+    var x = new XMLHttpRequest();
+    x.open( "GET", URL, false ); // false for synchronous request
+    x.send( null );
+    alert(x.responseText);
 }
