@@ -42,6 +42,9 @@ def user():
     """
     return dict(form=auth())
 
+def groupCalendar():
+    return locals()
+    
 
 @cache.action()
 def download():

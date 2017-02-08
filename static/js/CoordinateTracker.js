@@ -118,8 +118,10 @@ function findLocation (){
   
   var timeStart = timeCalc(hourTemp[0])-100;
   var timeEnd = timeCalc(hourTemp[hourTemp.length-1])+100;
-  var dayStart = dayTemp[0];
-  var dayEnd = dayTemp[dayTemp.length-1];
+
+  var dayStart = dayMap(dayTemp[0]);
+  var dayEnd = dayMap(dayTemp[dayTemp.length-1]);
+
   
   alert("Busy from " + timeStart + " to " + timeEnd + " " + dayStart + " through " + dayEnd);
   //post
@@ -128,11 +130,13 @@ function findLocation (){
   get_data("/QuickMeet/default/api/username.json");
 
 
+
   //return values to generate boxes
   dayNum = dayTemp;
   hourHeight = hourTemp;
   return dayNum, hourHeight;
   
+
     // add call to database here!
 }
 
