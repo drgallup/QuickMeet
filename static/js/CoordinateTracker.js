@@ -113,8 +113,6 @@ function findLocation (){
       hourTemp.push(i);
     }
   }
-  //alert(hourTemp);
-  //alert(dayTemp);
   
   var timeStart = timeCalc(hourTemp[0])-100;
   var timeEnd = timeCalc(hourTemp[hourTemp.length-1])+100;
@@ -124,11 +122,12 @@ function findLocation (){
 
   
   alert("Busy from " + timeStart + " to " + timeEnd + " " + dayStart + " through " + dayEnd);
-  //post
-    
-  post_data("/QuickMeet/default/api/username.json", timeStart, timeEnd, dayStart, dayEnd);
-  get_data("/QuickMeet/default/api/username.json");
 
+  //post API to update the end point
+  post_data("/QuickMeet/default/api/username.json", timeStart, timeEnd, dayStart, dayEnd);
+  
+  //The continous block is being drawn by the drawBox itself ignore GET
+  //get_data("/QuickMeet/default/api/username.json");
 
 
   //return values to generate boxes
@@ -139,6 +138,9 @@ function findLocation (){
 
     // add call to database here!
 }
+
+
+
 
 // maps the hour selected to the time displayed
 function timeCalc(x){
