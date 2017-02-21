@@ -1,3 +1,16 @@
+// --------------------------------------------------------------------
+// //  CoordinateTracker.js
+// //  Track the x,y coordinate when mouse click event happen on canvas
+// //
+// //  Version 0.8 - Nathan, 2/20/17
+// //  -Add event listener on Canvas for click
+// //  -Detects the day, added CSS file and moved some things.
+// //  -Detects and alerts day and time range that the user has selected
+// //  -Fixed dragging issues for box
+// // --------------------------------------------------------------------
+
+// ~~~~~~~~~~~~~~~~
+// Variables
 var day = [ 100, 200,
             300, 400,
             500, 600, 
@@ -5,7 +18,7 @@ var day = [ 100, 200,
             
 var hour = [];
 
-var canvas, startX, endX, startY, endY;
+var canvas, startX, endX, startY, endY, maxX, maxY;
 var mouseIsDown = false;
 
 var can = document.getElementById('myCanvas'),
@@ -14,6 +27,9 @@ var can = document.getElementById('myCanvas'),
     context = can.getContext('2d'),
     element = [];
 
+var dayNum;
+var hourHeight;
+// ~~~~~~~~~~~~~~~~
 can.addEventListener('mousedown', mouseDown, false);
 can.addEventListener('mousemove', mouseMove, false);
 can.addEventListener('mouseup', mouseUp, false);
@@ -28,12 +44,9 @@ function hourChange(){
   //alert(hour);
 }
 
-var dayNum;
-var hourHeight
 
-function mouseUp(eve) {
-    
-    
+// Updates coordinates to generate box
+function mouseUp(eve) {    
     if (mouseIsDown != false) {
         mouseIsDown = false;
         var pos = getMousePos(canvas, eve);
@@ -48,27 +61,45 @@ function mouseUp(eve) {
     
 }
 
+// Tracks user's initial click
 function mouseDown(eve) {
     mouseIsDown = true;
     var pos = getMousePos(canvas, eve);
     startX = endX = pos.x;
     startY = endY = pos.y;
+    maxX = startX;
+    maxY = startY;
     drawSquare(); 
 }
 
+// Tracjs user's drag
 function mouseMove(eve) {
     if (mouseIsDown !== false) {
         var pos = getMousePos(canvas, eve);
         endX = pos.x;
         endY = pos.y;
+        if(endX>maxX || endY>maxY){
+        	ctx.clearRect(0,0,c.width,c.height);
+    		drawGrid(); 
+        	maxX=endX;
+        	maxY=endY;
+        }
+        if(endX<maxX || endY<maxY){
+   	 	ctx.clearRect(0,0,c.width,c.height);
+    	drawGrid();        	
+        	maxX = endX;
+        	maxY = endY;
+
+        }
         drawSquare();
     }
 }
 
+// Draws live rendering box
 function drawSquare() {
     // creating a square
-    var w = endX - startX;
-    var h = endY - startY;
+    var w = maxX - startX;
+    var h = maxY - startY;
     var offsetX = (w < 0) ? w : 0;
     var offsetY = (h < 0) ? h : 0;
     var width = Math.abs(w);
