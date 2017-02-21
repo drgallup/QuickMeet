@@ -19,3 +19,5 @@ Dylan, 4pm 2/3/17, Ver. 0.6 - CoordinateTracker.js - detects and alerts day and 
 
 Fei & Kevin, 8am 2/8/17, ver. 0.7 CoordinateTracker.js -Update the database via RESTful API and setup database in db.py
 
+Nathan 4pm 2/20/17. ver. 0.8 CoordinateTracker.js -Fixed dragging issues for box
+
