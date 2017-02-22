@@ -31,8 +31,8 @@ function hourChange(){
   //alert(hour);
 }
 
-var dayNum;
-var hourHeight
+var dayNum = [];
+var hourHeight = [];
 
 function mouseUp(eve) {
     
@@ -46,11 +46,12 @@ function mouseUp(eve) {
     }
     ctx.clearRect(0,0,c.width,c.height);
     drawGrid();
-    dayNum, hourHeight = findLocation();
+    findLocation();
+    console.log(dayNum);
+    console.log(hourHeight);
     alert("before redrawing all events");
-    events.append(Object.freeze({time:hourHeight, day:hourHeight}));
-    for (item: events) {
-        drawBox(item.dayNum, item.time);
+    for (a = 0; a<dayNum.length; a++) {
+        drawBox(dayNum[a], hourHeight[a]);
     }
 }
 
@@ -131,7 +132,10 @@ function findLocation (){
 
   //post API to update the end point
   post_data("/QuickMeet/default/api/username.json", timeStart, timeEnd, dayStart, dayEnd);
+  //get_data("/QuickMeet/default/api/username.json");
 
+  dayNum.push(dayTemp);     
+  hourHeight.push(hourTemp);
   //return values to generate boxes
   return dayNum, hourHeight;
   
