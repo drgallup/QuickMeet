@@ -1,10 +1,13 @@
+//In the beginning, fetch all events and append them into this array and call draw
+//The Javscript entry point should generate uuid or accept uuid from the user
+var events = [];
+
 var day = [ 100, 200,
             300, 400,
             500, 600, 
             700, 800 ];
             
 var hour = [];
-
 var canvas, startX, endX, startY, endY;
 var mouseIsDown = false;
 
@@ -43,9 +46,12 @@ function mouseUp(eve) {
     }
     ctx.clearRect(0,0,c.width,c.height);
     drawGrid();
-    findLocation();
-    drawBox(dayNum, hourHeight);
-    
+    dayNum, hourHeight = findLocation();
+    alert("before redrawing all events");
+    events.append(Object.freeze({time:hourHeight, day:hourHeight}));
+    for (item: events) {
+        drawBox(item.dayNum, item.time);
+    }
 }
 
 function mouseDown(eve) {
@@ -125,18 +131,10 @@ function findLocation (){
 
   //post API to update the end point
   post_data("/QuickMeet/default/api/username.json", timeStart, timeEnd, dayStart, dayEnd);
-  
-  //The continous block is being drawn by the drawBox itself ignore GET
-  //get_data("/QuickMeet/default/api/username.json");
-
 
   //return values to generate boxes
-  dayNum = dayTemp;
-  hourHeight = hourTemp;
   return dayNum, hourHeight;
   
-
-    // add call to database here!
 }
 
 
