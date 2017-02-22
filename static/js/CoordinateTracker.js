@@ -16,6 +16,7 @@ var day = [ 100, 200,
             500, 600, 
             700, 800 ];
             
+// will be filled with the pixel locations of the intervals used (currently 10 minutes)
 var hour = [];
 
 var canvas, startX, endX, startY, endY, maxX, maxY;
@@ -37,8 +38,8 @@ can.addEventListener('mouseup', mouseUp, false);
 hourChange();
 // hourChange generates the pixel area of each hour
 function hourChange(){
-  var tempHeight = 400/rows;
-  for(var i=0; i<=rows; i++){
+  var tempHeight = 400/(rows*6);
+  for(var i=0; i<=(rows*6); i++){
     hour.push( i*tempHeight );
   }
   //alert(hour);
@@ -72,7 +73,7 @@ function mouseDown(eve) {
     drawSquare(); 
 }
 
-// Tracjs user's drag
+// Tracks user's drag
 function mouseMove(eve) {
     if (mouseIsDown !== false) {
         var pos = getMousePos(canvas, eve);
@@ -147,14 +148,14 @@ function findLocation (){
   //alert(hourTemp);
   //alert(dayTemp);
   
-  var timeStart = timeCalc(hourTemp[0])-100;
-  var timeEnd = timeCalc(hourTemp[hourTemp.length-1])+100;
+  var timeStart = timeCalc(hourTemp[0]);
+  var timeEnd = timeCalc(hourTemp[hourTemp.length-1]);
 
   var dayStart = dayTemp[0];
   var dayEnd = dayTemp[dayTemp.length-1];
 
   
-  alert("Busy from " + timeStart + " to " + timeEnd + " " + dayStart + " through " + dayEnd);
+  alert("Busy from " + timeStart + " to " + timeEnd + " " + dayMap(dayStart) + " through " + dayMap(dayEnd));
   //post
     
   post_data("/QuickMeet/default/api/username.json", timeStart, timeEnd, dayStart, dayEnd);
@@ -173,7 +174,7 @@ function findLocation (){
 
 // maps the hour selected to the time displayed
 function timeCalc(x){
-  return (x*100 + 800);
+  return (Math.floor(x/6)*100 + (x%6)*10 + 700);
 }
 
 // maps the days to strings
@@ -204,12 +205,12 @@ function post_data(URL, tStart, tEnd, dStart, dEnd){
     x.open('POST', URL, false);
     x.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     x.send("timeStart=" + tStart + "&timeEnd=" + tEnd + "&dayStart=" + dStart + "&dayEnd=" + dEnd);
-    alert(x.responseText);
+    //alert(x.responseText);
 }
 
     function get_data(URL){
     var x = new XMLHttpRequest();
     x.open( "GET", URL, false ); // false for synchronous request
     x.send( null );
-    alert(x.responseText);
+    //alert(x.responseText);
 }
