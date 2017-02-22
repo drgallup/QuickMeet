@@ -13,7 +13,7 @@ if request.global_settings.web2py_version < "2.14.1":
 # be redirected to HTTPS, uncomment the line below:
 # -------------------------------------------------------------------------
 # request.requires_https()
-
+db = DAL("sqlite://storage.sqlite")
 # -------------------------------------------------------------------------
 # app configuration made easy. Look inside private/appconfig.ini
 # -------------------------------------------------------------------------
@@ -126,6 +126,26 @@ auth.settings.reset_password_requires_verification = True
 # >>> for row in rows: print row.id, row.myfield
 # -------------------------------------------------------------------------
 
+#Auto increment id(auto generated) as eventID
+#Event can belong to single/multiple group using foreign id (events.id)
+db.define_table('events',
+                Field('username','string',requires=IS_NOT_EMPTY()),
+                Field('startTime','integer'),
+                Field('endTime', 'integer'),
+                Field('days', 'list:integer')
+               )
+
+#URL will be use as the primary key to restrict insertion
+db.define_table('users', 
+                Field('url', 'text'),
+                Field('events', 'list:integer')
+                )
+
+#Each team owns one or more member saved as a list
+#Foreign key points to table users
+db.define_table('team',
+        Field('teamMember', 'list:integer')
+               )
 # -------------------------------------------------------------------------
 # after defining tables, uncomment below to enable auditing
 # -------------------------------------------------------------------------

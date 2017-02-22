@@ -2,11 +2,15 @@
 // //  CoordinateTracker.js
 // //  Track the x,y coordinate when mouse click event happen on canvas
 // //
-// //  Version 0.5 - Nathan, 10am, 2/3/17
-// //  -Add event listener on Canvas for on mouse click, on mouse movement, 
-// //   and on mouse release
-// //  -Creates live rendering box when you click and drag
+// //  Version 0.8 - Nathan, 2/20/17
+// //  -Add event listener on Canvas for click
+// //  -Detects the day, added CSS file and moved some things.
+// //  -Detects and alerts day and time range that the user has selected
+// //  -Fixed dragging issues for box
 // // --------------------------------------------------------------------
+
+// ~~~~~~~~~~~~~~~~
+// Variables
 var day = [ 100, 200,
             300, 400,
             500, 600, 
@@ -14,7 +18,7 @@ var day = [ 100, 200,
             
 var hour = [];
 
-var canvas, startX, endX, startY, endY;
+var canvas, startX, endX, startY, endY, maxX, maxY;
 var mouseIsDown = false;
 
 var can = document.getElementById('myCanvas'),
@@ -23,6 +27,9 @@ var can = document.getElementById('myCanvas'),
     context = can.getContext('2d'),
     element = [];
 
+var dayNum;
+var hourHeight;
+// ~~~~~~~~~~~~~~~~
 can.addEventListener('mousedown', mouseDown, false);
 can.addEventListener('mousemove', mouseMove, false);
 can.addEventListener('mouseup', mouseUp, false);
@@ -38,7 +45,8 @@ function hourChange(){
 }
 
 
-function mouseUp(eve) {
+// Updates coordinates to generate box
+function mouseUp(eve) {    
     if (mouseIsDown != false) {
         mouseIsDown = false;
         var pos = getMousePos(canvas, eve);
@@ -49,29 +57,49 @@ function mouseUp(eve) {
     ctx.clearRect(0,0,c.width,c.height);
     drawGrid();
     findLocation();
+    drawBox(dayNum, hourHeight);
+    
 }
 
+// Tracks user's initial click
 function mouseDown(eve) {
     mouseIsDown = true;
     var pos = getMousePos(canvas, eve);
     startX = endX = pos.x;
     startY = endY = pos.y;
+    maxX = startX;
+    maxY = startY;
     drawSquare(); 
 }
 
+// Tracjs user's drag
 function mouseMove(eve) {
     if (mouseIsDown !== false) {
         var pos = getMousePos(canvas, eve);
         endX = pos.x;
         endY = pos.y;
+        if(endX>maxX || endY>maxY){
+        	ctx.clearRect(0,0,c.width,c.height);
+    		drawGrid(); 
+        	maxX=endX;
+        	maxY=endY;
+        }
+        if(endX<maxX || endY<maxY){
+   	 	ctx.clearRect(0,0,c.width,c.height);
+    	drawGrid();        	
+        	maxX = endX;
+        	maxY = endY;
+
+        }
         drawSquare();
     }
 }
 
+// Draws live rendering box
 function drawSquare() {
     // creating a square
-    var w = endX - startX;
-    var h = endY - startY;
+    var w = maxX - startX;
+    var h = maxY - startY;
     var offsetX = (w < 0) ? w : 0;
     var offsetY = (h < 0) ? h : 0;
     var width = Math.abs(w);
@@ -81,6 +109,7 @@ function drawSquare() {
     ctx.fillStyle = "rgba(128,0,0,1)";
     ctx.fillRect(startX + offsetX, startY + offsetY, width, height);
     ctx.lineWidth = 1;
+   
 }
 
 function getMousePos(canvas, evt) {
@@ -108,24 +137,38 @@ function findLocation (){
   // figure out which hours were selected
   for (var i = 0; i<hour.length-1; i++){
     if( hour[i] < startY && startY < hour[i+1] ){
-      hourTemp.push(timeCalc(i));
+      hourTemp.push(i);
     }else if( startY < hour[i] && hour[i+1] < endY ){
-      hourTemp.push(timeCalc(i));
+      hourTemp.push(i);
     }else if( hour[i] < endY && endY < hour[i+1] ){
-      hourTemp.push(timeCalc(i));
+      hourTemp.push(i);
     }
   }
   //alert(hourTemp);
   //alert(dayTemp);
   
-  var timeStart = hourTemp[0]-100;
-  var timeEnd = hourTemp[hourTemp.length-1];
-  var dayStart = dayMap(dayTemp[0]);
-  var dayEnd = dayMap(dayTemp[dayTemp.length-1]);
+  var timeStart = timeCalc(hourTemp[0])-100;
+  var timeEnd = timeCalc(hourTemp[hourTemp.length-1])+100;
+
+  var dayStart = dayTemp[0];
+  var dayEnd = dayTemp[dayTemp.length-1];
+
   
   alert("Busy from " + timeStart + " to " + timeEnd + " " + dayStart + " through " + dayEnd);
+  //post
+    
+  post_data("/QuickMeet/default/api/username.json", timeStart, timeEnd, dayStart, dayEnd);
+  get_data("/QuickMeet/default/api/username.json");
+
+
+
+  //return values to generate boxes
+  dayNum = dayTemp;
+  hourHeight = hourTemp;
+  return dayNum, hourHeight;
   
-  // add call to database here!
+
+    // add call to database here!
 }
 
 // maps the hour selected to the time displayed
@@ -153,5 +196,20 @@ function dayMap(x){
     default:
       return "Error: Invalid Day";
   }
+    
 }
-      
+
+function post_data(URL, tStart, tEnd, dStart, dEnd){
+    var x = new XMLHttpRequest();
+    x.open('POST', URL, false);
+    x.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    x.send("timeStart=" + tStart + "&timeEnd=" + tEnd + "&dayStart=" + dStart + "&dayEnd=" + dEnd);
+    alert(x.responseText);
+}
+
+    function get_data(URL){
+    var x = new XMLHttpRequest();
+    x.open( "GET", URL, false ); // false for synchronous request
+    x.send( null );
+    alert(x.responseText);
+}
