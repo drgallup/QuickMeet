@@ -7,6 +7,10 @@
 // //  -Detects the day, added CSS file and moved some things.
 // //  -Detects and alerts day and time range that the user has selected
 // //  -Fixed dragging issues for box
+// //
+// //  Version 1.1 - Dylan, 2/23/17
+// //  - Added tooltips
+// //  - Added 10 minute interval on time
 // // --------------------------------------------------------------------
 
 // ~~~~~~~~~~~~~~~~
@@ -18,6 +22,8 @@ var day = [ 100, 200,
             
 // will be filled with the pixel locations of the intervals used (currently 10 minutes)
 var hour = [];
+
+var currentDataSet = [];
 
 var canvas, startX, endX, startY, endY, maxX, maxY;
 var mouseIsDown = false;
@@ -34,6 +40,17 @@ var hourHeight;
 can.addEventListener('mousedown', mouseDown, false);
 can.addEventListener('mousemove', mouseMove, false);
 can.addEventListener('mouseup', mouseUp, false);
+
+// tooltip
+// http://stackoverflow.com/questions/15702867/html-tooltip-position-relative-to-mouse-pointer
+var tooltipSpan = document.getElementById('tooltip-span');
+
+/*window.onmousemove = function (e) {
+    var x = e.clientX,
+        y = e.clientY;
+    tooltipSpan.style.top = (y + 20) + 'px';
+    tooltipSpan.style.left = (x + 20) + 'px';
+};*/
 
 hourChange();
 // hourChange generates the pixel area of each hour
@@ -73,10 +90,17 @@ function mouseDown(eve) {
     drawSquare(); 
 }
 
+var toolX;
+var toolY;
 // Tracks user's drag
 function mouseMove(eve) {
+    ctx.clearRect(0,0,c.width,c.height);
+    drawGrid();
+    // mouse position
+    var pos = getMousePos(canvas, eve);
+
+    // do drag box
     if (mouseIsDown !== false) {
-        var pos = getMousePos(canvas, eve);
         endX = pos.x;
         endY = pos.y;
         if(endX>maxX || endY>maxY){
@@ -94,6 +118,41 @@ function mouseMove(eve) {
         }
         drawSquare();
     }
+    
+    // tooltip
+    toolX = [pos.x - 50, pos.x - 10];
+    toolY = [pos.y, pos.y+20];
+    if(toolY[1] > 350){
+      toolY[0] -= 20;
+      toolY[1] -= 20;
+    }
+    
+    // box
+    ctx.beginPath();
+    ctx.fillStyle = "rgba(30,30,30,1)";
+    ctx.fillRect(toolX[0], toolY[0], toolX[1]-toolX[0], toolY[1]-toolY[0]);
+    ctx.lineWidth = 1;
+    
+    // current time
+    // figure out which hours were selected
+    var tipDisplay;
+    for (var i = 0; i<hour.length-1; i++){
+      if( hour[i] < pos.y && pos.y < hour[i+1] ){
+        tipDisplay = timeCalc(i);
+      }
+    }
+    
+    // change tipDisplay to standard time
+    if(tipDisplay > 1250){
+      tipDisplay -= 1200;
+    }
+    
+    // text
+		ctx.font = "14px Arial";
+		ctx.fillStyle = 'white';
+		ctx.fillText(tipDisplay,toolX[0]+5,toolY[1]-5);
+    
+    
 }
 
 // Draws live rendering box
