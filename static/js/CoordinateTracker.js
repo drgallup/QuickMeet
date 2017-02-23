@@ -55,8 +55,8 @@ var tooltipSpan = document.getElementById('tooltip-span');
 hourChange();
 // hourChange generates the pixel area of each hour
 function hourChange(){
-  var tempHeight = 400/(rows*6);
-  for(var i=0; i<=(rows*6); i++){
+  var tempHeight = 400/(rows*7);
+  for(var i=0; i<=(rows*7); i++){
     hour.push( i*tempHeight );
   }
   //alert(hour);
@@ -137,7 +137,7 @@ function mouseMove(eve) {
     // figure out which hours were selected
     var tipDisplay;
     for (var i = 0; i<hour.length-1; i++){
-      if( hour[i] < pos.y && pos.y < hour[i+1] ){
+      if( hour[i] <= pos.y && pos.y < hour[i+1] ){
         tipDisplay = timeCalc(i);
       }
     }
@@ -145,6 +145,8 @@ function mouseMove(eve) {
     // change tipDisplay to standard time
     if(tipDisplay > 1250){
       tipDisplay -= 1200;
+    }else if(!tipDisplay){
+      tipDisplay = 700;
     }
     
     // text
@@ -233,7 +235,7 @@ function findLocation (){
 
 // maps the hour selected to the time displayed
 function timeCalc(x){
-  return (Math.floor(x/6)*100 + (x%6)*10 + 700);
+  return (Math.floor(x/7)*100 + (x%7 < 6 ? x%7 : 10)*10 + 700);
 }
 
 // maps the days to strings
