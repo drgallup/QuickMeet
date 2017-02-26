@@ -33,7 +33,6 @@ var canvas, startX, endX, startY, endY;
 var currentDataSet = [];
 
 var canvas, startX, endX, startY, endY, maxX, maxY;
->>>>>>> 5dad8f0b2a5d26bfb2186b1b9de8898df0b523be
 var mouseIsDown = false;
 
 var can = document.getElementById('myCanvas'),
