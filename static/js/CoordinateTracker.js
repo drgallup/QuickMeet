@@ -7,6 +7,10 @@
 // //  -Detects the day, added CSS file and moved some things.
 // //  -Detects and alerts day and time range that the user has selected
 // //  -Fixed dragging issues for box
+// //
+// //  Version 1.1 - Dylan, 2/23/17
+// //  - Added tooltips
+// //  - Added 10 minute interval on time
 // // --------------------------------------------------------------------
 
 // ~~~~~~~~~~~~~~~~
@@ -16,7 +20,10 @@ var day = [ 100, 200,
             500, 600, 
             700, 800 ];
             
+// will be filled with the pixel locations of the intervals used (currently 10 minutes)
 var hour = [];
+
+var currentDataSet = [];
 
 var canvas, startX, endX, startY, endY, maxX, maxY;
 var mouseIsDown = false;
@@ -34,11 +41,22 @@ can.addEventListener('mousedown', mouseDown, false);
 can.addEventListener('mousemove', mouseMove, false);
 can.addEventListener('mouseup', mouseUp, false);
 
+// tooltip
+// http://stackoverflow.com/questions/15702867/html-tooltip-position-relative-to-mouse-pointer
+var tooltipSpan = document.getElementById('tooltip-span');
+
+/*window.onmousemove = function (e) {
+    var x = e.clientX,
+        y = e.clientY;
+    tooltipSpan.style.top = (y + 20) + 'px';
+    tooltipSpan.style.left = (x + 20) + 'px';
+};*/
+
 hourChange();
 // hourChange generates the pixel area of each hour
 function hourChange(){
-  var tempHeight = 400/rows;
-  for(var i=0; i<=rows; i++){
+  var tempHeight = 400/(rows*7);
+  for(var i=0; i<=(rows*7); i++){
     hour.push( i*tempHeight );
   }
   //alert(hour);
@@ -72,10 +90,17 @@ function mouseDown(eve) {
     drawSquare(); 
 }
 
-// Tracjs user's drag
+var toolX;
+var toolY;
+// Tracks user's drag
 function mouseMove(eve) {
+    ctx.clearRect(0,0,c.width,c.height);
+    drawGrid();
+    // mouse position
+    var pos = getMousePos(canvas, eve);
+
+    // do drag box
     if (mouseIsDown !== false) {
-        var pos = getMousePos(canvas, eve);
         endX = pos.x;
         endY = pos.y;
         if(endX>maxX || endY>maxY){
@@ -93,6 +118,43 @@ function mouseMove(eve) {
         }
         drawSquare();
     }
+    
+    // tooltip
+    toolX = [pos.x - 50, pos.x - 10];
+    toolY = [pos.y, pos.y+20];
+    if(toolY[1] > 350){
+      toolY[0] -= 20;
+      toolY[1] -= 20;
+    }
+    
+    // box
+    ctx.beginPath();
+    ctx.fillStyle = "rgba(30,30,30,1)";
+    ctx.fillRect(toolX[0], toolY[0], toolX[1]-toolX[0], toolY[1]-toolY[0]);
+    ctx.lineWidth = 1;
+    
+    // current time
+    // figure out which hours were selected
+    var tipDisplay;
+    for (var i = 0; i<hour.length-1; i++){
+      if( hour[i] <= pos.y && pos.y < hour[i+1] ){
+        tipDisplay = timeCalc(i);
+      }
+    }
+    
+    // change tipDisplay to standard time
+    if(tipDisplay > 1250){
+      tipDisplay -= 1200;
+    }else if(!tipDisplay){
+      tipDisplay = 700;
+    }
+    
+    // text
+		ctx.font = "14px Arial";
+		ctx.fillStyle = 'white';
+		ctx.fillText(tipDisplay,toolX[0]+5,toolY[1]-5);
+    
+    
 }
 
 // Draws live rendering box
@@ -147,14 +209,14 @@ function findLocation (){
   //alert(hourTemp);
   //alert(dayTemp);
   
-  var timeStart = timeCalc(hourTemp[0])-100;
-  var timeEnd = timeCalc(hourTemp[hourTemp.length-1])+100;
+  var timeStart = timeCalc(hourTemp[0]);
+  var timeEnd = timeCalc(hourTemp[hourTemp.length-1]);
 
   var dayStart = dayTemp[0];
   var dayEnd = dayTemp[dayTemp.length-1];
 
   
-  alert("Busy from " + timeStart + " to " + timeEnd + " " + dayStart + " through " + dayEnd);
+  alert("Busy from " + timeStart + " to " + timeEnd + " " + dayMap(dayStart) + " through " + dayMap(dayEnd));
   //post
     
   post_data("/QuickMeet/default/api/username.json", timeStart, timeEnd, dayStart, dayEnd);
@@ -173,7 +235,7 @@ function findLocation (){
 
 // maps the hour selected to the time displayed
 function timeCalc(x){
-  return (x*100 + 800);
+  return (Math.floor(x/7)*100 + (x%7 < 6 ? x%7 : 10)*10 + 700);
 }
 
 // maps the days to strings
@@ -204,12 +266,12 @@ function post_data(URL, tStart, tEnd, dStart, dEnd){
     x.open('POST', URL, false);
     x.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     x.send("timeStart=" + tStart + "&timeEnd=" + tEnd + "&dayStart=" + dStart + "&dayEnd=" + dEnd);
-    alert(x.responseText);
+    //alert(x.responseText);
 }
 
     function get_data(URL){
     var x = new XMLHttpRequest();
     x.open( "GET", URL, false ); // false for synchronous request
     x.send( null );
-    alert(x.responseText);
+    //alert(x.responseText);
 }
