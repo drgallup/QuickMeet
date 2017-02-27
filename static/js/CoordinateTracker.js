@@ -1,138 +1,137 @@
 
-=======
 // --------------------------------------------------------------------
-// //  CoordinateTracker.js
-// //  Track the x,y coordinate when mouse click event happen on canvas
-// //
-// //  Version 0.8 - Nathan, 2/20/17
-// //  -Add event listener on Canvas for click
-// //  -Detects the day, added CSS file and moved some things.
-// //  -Detects and alerts day and time range that the user has selected
-// //  -Fixed dragging issues for box
-// //
-// //  Version 1.1 - Dylan, 2/23/17
-// //  - Added tooltips
-// //  - Added 10 minute interval on time
-// // --------------------------------------------------------------------
+    // //  CoordinateTracker.js
+    // //  Track the x,y coordinate when mouse click event happen on canvas
+    // //
+    // //  Version 0.8 - Nathan, 2/20/17
+    // //  -Add event listener on Canvas for click
+    // //  -Detects the day, added CSS file and moved some things.
+    // //  -Detects and alerts day and time range that the user has selected
+    // //  -Fixed dragging issues for box
+    // //
+    // //  Version 1.1 - Dylan, 2/23/17
+    // //  - Added tooltips
+    // //  - Added 10 minute interval on time
+    // // --------------------------------------------------------------------
 
-// ~~~~~~~~~~~~~~~~
-// Variables
-var day = [ 100, 200,
-            300, 400,
-            500, 600, 
-            700, 800 ];
+    // ~~~~~~~~~~~~~~~~
+    // Variables
+    var day = [ 100, 200,
+                300, 400,
+                500, 600, 
+                700, 800 ];
 
-//In the beginning, fetch all events and append them into this array and call draw
-//The Javscript entry point should generate uuid or accept uuid from the user
-var events = [];
+    //In the beginning, fetch all events and append them into this array and call draw
+    //The Javscript entry point should generate uuid or accept uuid from the user
+    var events = [];
 
-// will be filled with the pixel locations of the intervals used (currently 10 minutes)
-var hour = [];
-var canvas, startX, endX, startY, endY;
+    // will be filled with the pixel locations of the intervals used (currently 10 minutes)
+    var hour = [];
+    var canvas, startX, endX, startY, endY;
 
-var currentDataSet = [];
+    var currentDataSet = [];
 
-var canvas, startX, endX, startY, endY, maxX, maxY;
-var mouseIsDown = false;
+    var canvas, startX, endX, startY, endY, maxX, maxY;
+    var mouseIsDown = false;
 
-var can = document.getElementById('myCanvas'),
-    canLeft = can.offsetLeft,
-    canTop = can.offsetTop,
-    context = can.getContext('2d'),
-    element = [];
+    var can = document.getElementById('myCanvas'),
+        canLeft = can.offsetLeft,
+        canTop = can.offsetTop,
+        context = can.getContext('2d'),
+        element = [];
 
-var dayNum;
-var hourHeight;
-// ~~~~~~~~~~~~~~~~
-can.addEventListener('mousedown', mouseDown, false);
-can.addEventListener('mousemove', mouseMove, false);
-can.addEventListener('mouseup', mouseUp, false);
+    var dayNum;
+    var hourHeight;
+    // ~~~~~~~~~~~~~~~~
+    can.addEventListener('mousedown', mouseDown, false);
+    can.addEventListener('mousemove', mouseMove, false);
+    can.addEventListener('mouseup', mouseUp, false);
 
-// tooltip
-// http://stackoverflow.com/questions/15702867/html-tooltip-position-relative-to-mouse-pointer
-var tooltipSpan = document.getElementById('tooltip-span');
+    // tooltip
+    // http://stackoverflow.com/questions/15702867/html-tooltip-position-relative-to-mouse-pointer
+    var tooltipSpan = document.getElementById('tooltip-span');
 
-/*window.onmousemove = function (e) {
-    var x = e.clientX,
-        y = e.clientY;
-    tooltipSpan.style.top = (y + 20) + 'px';
-    tooltipSpan.style.left = (x + 20) + 'px';
-};*/
+    /*window.onmousemove = function (e) {
+        var x = e.clientX,
+            y = e.clientY;
+        tooltipSpan.style.top = (y + 20) + 'px';
+        tooltipSpan.style.left = (x + 20) + 'px';
+    };*/
 
-hourChange();
-// hourChange generates the pixel area of each hour
-function hourChange(){
-  var tempHeight = 400/(rows*7);
-  for(var i=0; i<=(rows*7); i++){
-    hour.push( i*tempHeight );
-  }
-  //alert(hour);
-}
+    hourChange();
+    // hourChange generates the pixel area of each hour
+    function hourChange(){
+      var tempHeight = 400/(rows*7);
+      for(var i=0; i<=(rows*7); i++){
+        hour.push( i*tempHeight );
+      }
+      //alert(hour);
+    }
 
-var dayNum = [];
-var hourHeight = [];
+    var dayNum = [];
+    var hourHeight = [];
 
-// Updates coordinates to generate box
-function mouseUp(eve) {    
-    if (mouseIsDown != false) {
-        mouseIsDown = false;
+    // Updates coordinates to generate box
+    function mouseUp(eve) {    
+        if (mouseIsDown != false) {
+            mouseIsDown = false;
+            var pos = getMousePos(canvas, eve);
+            endX = pos.x;
+            endY = pos.y;
+            drawSquare(); 
+        }
+        ctx.clearRect(0,0,c.width,c.height);
+        drawGrid();
+        findLocation();
+        console.log(dayNum);
+        console.log(hourHeight);
+        alert("before redrawing all events");
+        for (a = 0; a<dayNum.length; a++) {
+            drawBox(dayNum[a], hourHeight[a]);
+        }
+    }
+
+    // Tracks user's initial click
+    function mouseDown(eve) {
+        mouseIsDown = true;
         var pos = getMousePos(canvas, eve);
-        endX = pos.x;
-        endY = pos.y;
+        startX = endX = pos.x;
+        startY = endY = pos.y;
+        maxX = startX;
+        maxY = startY;
         drawSquare(); 
     }
-    ctx.clearRect(0,0,c.width,c.height);
-    drawGrid();
-    findLocation();
-    console.log(dayNum);
-    console.log(hourHeight);
-    alert("before redrawing all events");
-    for (a = 0; a<dayNum.length; a++) {
-        drawBox(dayNum[a], hourHeight[a]);
-    }
-}
 
-// Tracks user's initial click
-function mouseDown(eve) {
-    mouseIsDown = true;
-    var pos = getMousePos(canvas, eve);
-    startX = endX = pos.x;
-    startY = endY = pos.y;
-    maxX = startX;
-    maxY = startY;
-    drawSquare(); 
-}
+    var toolX;
+    var toolY;
+    // Tracks user's drag
+    function mouseMove(eve) {
+        ctx.clearRect(0,0,c.width,c.height);
+        drawGrid();
+        // mouse position
+        var pos = getMousePos(canvas, eve);
 
-var toolX;
-var toolY;
-// Tracks user's drag
-function mouseMove(eve) {
-    ctx.clearRect(0,0,c.width,c.height);
-    drawGrid();
-    // mouse position
-    var pos = getMousePos(canvas, eve);
+        // do drag box
+        if (mouseIsDown !== false) {
+            endX = pos.x;
+            endY = pos.y;
+            if(endX>maxX || endY>maxY){
+                ctx.clearRect(0,0,c.width,c.height);
+                drawGrid(); 
+                maxX=endX;
+                maxY=endY;
+            }
+            if(endX<maxX || endY<maxY){
+            ctx.clearRect(0,0,c.width,c.height);
+            drawGrid();        	
+                maxX = endX;
+                maxY = endY;
 
-    // do drag box
-    if (mouseIsDown !== false) {
-        endX = pos.x;
-        endY = pos.y;
-        if(endX>maxX || endY>maxY){
-        	ctx.clearRect(0,0,c.width,c.height);
-    		drawGrid(); 
-        	maxX=endX;
-        	maxY=endY;
+            }
+            drawSquare();
         }
-        if(endX<maxX || endY<maxY){
-   	 	ctx.clearRect(0,0,c.width,c.height);
-    	drawGrid();        	
-        	maxX = endX;
-        	maxY = endY;
-
-        }
-        drawSquare();
-    }
-    
-    // tooltip
+        
+        // tooltip
     toolX = [pos.x - 50, pos.x - 10];
     toolY = [pos.y, pos.y+20];
     if(toolY[1] > 350){
@@ -167,6 +166,9 @@ function mouseMove(eve) {
 		ctx.fillStyle = 'white';
 		ctx.fillText(tipDisplay,toolX[0]+5,toolY[1]-5);
     
+    for (a = 0; a<dayNum.length; a++) {
+        drawBox(dayNum[a], hourHeight[a]); 
+    }
     
 }
 
