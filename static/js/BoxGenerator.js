@@ -9,7 +9,7 @@ function drawBox(dayNum, hourHeight){
     
     var height = tileHeight;
     var width  = dayNum.length*tileWidth;       
-    height = height*hourHeight.length;
+    height = height*(hourHeight.length/6);
        
     //alert("x coordinate is " + dayNum[0]*tileWidth+tileWidth + "y coordinate is " + hourHeight[0]*tileHeight + "width is " + width + "height is " + height);
         

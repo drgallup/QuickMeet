@@ -1,4 +1,4 @@
-timestamp: 2017-01-31T12:11:28.375372
+timestamp: 2017-02-08T21:17:58.484331
 CREATE TABLE auth_user(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     first_name CHAR(128),
@@ -10,21 +10,21 @@ CREATE TABLE auth_user(
     registration_id CHAR(512)
 );
 success!
-timestamp: 2017-01-31T12:11:28.398260
+timestamp: 2017-02-08T21:17:58.521852
 CREATE TABLE auth_group(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     role CHAR(512),
     description TEXT
 );
 success!
-timestamp: 2017-01-31T12:11:28.400079
+timestamp: 2017-02-08T21:17:58.586645
 CREATE TABLE auth_membership(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
     group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  
 );
 success!
-timestamp: 2017-01-31T12:11:28.404540
+timestamp: 2017-02-08T21:17:58.621479
 CREATE TABLE auth_permission(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  ,
@@ -33,7 +33,7 @@ CREATE TABLE auth_permission(
     record_id INTEGER
 );
 success!
-timestamp: 2017-01-31T12:11:28.419338
+timestamp: 2017-02-08T21:17:58.670247
 CREATE TABLE auth_event(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     time_stamp TIMESTAMP,
@@ -43,7 +43,7 @@ CREATE TABLE auth_event(
     description TEXT
 );
 success!
-timestamp: 2017-01-31T12:11:28.423974
+timestamp: 2017-02-08T21:17:58.711249
 CREATE TABLE auth_cas(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
@@ -51,5 +51,27 @@ CREATE TABLE auth_cas(
     service CHAR(512),
     ticket CHAR(512),
     renew CHAR(1)
+);
+success!
+timestamp: 2017-02-08T21:17:58.752487
+CREATE TABLE events(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username CHAR(512),
+    startTime INTEGER,
+    endTime INTEGER,
+    days TEXT
+);
+success!
+timestamp: 2017-02-08T21:17:58.785502
+CREATE TABLE users(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    url TEXT,
+    events TEXT
+);
+success!
+timestamp: 2017-02-08T21:17:58.829387
+CREATE TABLE team(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    teamMember TEXT
 );
 success!

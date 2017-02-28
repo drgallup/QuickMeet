@@ -15,4 +15,10 @@ Nathan, 10am 2/3/17, Ver. 0.4 CalendarGenerator.js - fixed time colors
 					 
 Dylan, 1pm 2/3/17, Ver. 0.5 - calendar.css - added centering and global variables to css. 
 
-Dylan, 4pm 2/3/17, Ver. 0.6 - CoordinateTracker.js - detects and alerts day and time range that the user has selected.
+Dylan, 4pm 2/3/17, Ver. 0.6 - CoordinateTracker.js - detects and alerts day and time range that the user has selected
+
+Fei & Kevin, 8am 2/8/17, ver. 0.7 CoordinateTracker.js -Update the database via RESTful API and setup database in db.py
+
+Nathan 4pm 2/20/17. ver. 0.8 CoordinateTracker.js -Fixed dragging issues for box
+
+Dylan 6pm 2/22/17. ver 1.1 CoordinateTracker.js - split sections into 7ths for 10 minute intervals and added tooltips
