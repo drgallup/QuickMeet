@@ -1,125 +1,137 @@
+
 // --------------------------------------------------------------------
-// //  CoordinateTracker.js
-// //  Track the x,y coordinate when mouse click event happen on canvas
-// //
-// //  Version 0.8 - Nathan, 2/20/17
-// //  -Add event listener on Canvas for click
-// //  -Detects the day, added CSS file and moved some things.
-// //  -Detects and alerts day and time range that the user has selected
-// //  -Fixed dragging issues for box
-// //
-// //  Version 1.1 - Dylan, 2/23/17
-// //  - Added tooltips
-// //  - Added 10 minute interval on time
-// // --------------------------------------------------------------------
+    // //  CoordinateTracker.js
+    // //  Track the x,y coordinate when mouse click event happen on canvas
+    // //
+    // //  Version 0.8 - Nathan, 2/20/17
+    // //  -Add event listener on Canvas for click
+    // //  -Detects the day, added CSS file and moved some things.
+    // //  -Detects and alerts day and time range that the user has selected
+    // //  -Fixed dragging issues for box
+    // //
+    // //  Version 1.1 - Dylan, 2/23/17
+    // //  - Added tooltips
+    // //  - Added 10 minute interval on time
+    // // --------------------------------------------------------------------
 
-// ~~~~~~~~~~~~~~~~
-// Variables
-var day = [ 100, 200,
-            300, 400,
-            500, 600, 
-            700, 800 ];
-            
-// will be filled with the pixel locations of the intervals used (currently 10 minutes)
-var hour = [];
+    // ~~~~~~~~~~~~~~~~
+    // Variables
+    var day = [ 100, 200,
+                300, 400,
+                500, 600, 
+                700, 800 ];
 
-var currentDataSet = [];
+    //In the beginning, fetch all events and append them into this array and call draw
+    //The Javscript entry point should generate uuid or accept uuid from the user
+    var events = [];
 
-var canvas, startX, endX, startY, endY, maxX, maxY;
-var mouseIsDown = false;
+    // will be filled with the pixel locations of the intervals used (currently 10 minutes)
+    var hour = [];
+    var canvas, startX, endX, startY, endY;
 
-var can = document.getElementById('myCanvas'),
-    canLeft = can.offsetLeft,
-    canTop = can.offsetTop,
-    context = can.getContext('2d'),
-    element = [];
+    var currentDataSet = [];
 
-var dayNum;
-var hourHeight;
-// ~~~~~~~~~~~~~~~~
-can.addEventListener('mousedown', mouseDown, false);
-can.addEventListener('mousemove', mouseMove, false);
-can.addEventListener('mouseup', mouseUp, false);
+    var canvas, startX, endX, startY, endY, maxX, maxY;
+    var mouseIsDown = false;
 
-// tooltip
-// http://stackoverflow.com/questions/15702867/html-tooltip-position-relative-to-mouse-pointer
-var tooltipSpan = document.getElementById('tooltip-span');
+    var can = document.getElementById('myCanvas'),
+        canLeft = can.offsetLeft,
+        canTop = can.offsetTop,
+        context = can.getContext('2d'),
+        element = [];
 
-/*window.onmousemove = function (e) {
-    var x = e.clientX,
-        y = e.clientY;
-    tooltipSpan.style.top = (y + 20) + 'px';
-    tooltipSpan.style.left = (x + 20) + 'px';
-};*/
+    var dayNum;
+    var hourHeight;
+    // ~~~~~~~~~~~~~~~~
+    can.addEventListener('mousedown', mouseDown, false);
+    can.addEventListener('mousemove', mouseMove, false);
+    can.addEventListener('mouseup', mouseUp, false);
 
-hourChange();
-// hourChange generates the pixel area of each hour
-function hourChange(){
-  var tempHeight = 400/(rows*7);
-  for(var i=0; i<=(rows*7); i++){
-    hour.push( i*tempHeight );
-  }
-  //alert(hour);
-}
+    // tooltip
+    // http://stackoverflow.com/questions/15702867/html-tooltip-position-relative-to-mouse-pointer
+    var tooltipSpan = document.getElementById('tooltip-span');
 
+    /*window.onmousemove = function (e) {
+        var x = e.clientX,
+            y = e.clientY;
+        tooltipSpan.style.top = (y + 20) + 'px';
+        tooltipSpan.style.left = (x + 20) + 'px';
+    };*/
 
-// Updates coordinates to generate box
-function mouseUp(eve) {    
-    if (mouseIsDown != false) {
-        mouseIsDown = false;
+    hourChange();
+    // hourChange generates the pixel area of each hour
+    function hourChange(){
+      var tempHeight = 400/(rows*7);
+      for(var i=0; i<=(rows*7); i++){
+        hour.push( i*tempHeight );
+      }
+      //alert(hour);
+    }
+
+    var dayNum = [];
+    var hourHeight = [];
+
+    // Updates coordinates to generate box
+    function mouseUp(eve) {    
+        if (mouseIsDown != false) {
+            mouseIsDown = false;
+            var pos = getMousePos(canvas, eve);
+            endX = pos.x;
+            endY = pos.y;
+            drawSquare(); 
+        }
+        ctx.clearRect(0,0,c.width,c.height);
+        drawGrid();
+        findLocation();
+        console.log(dayNum);
+        console.log(hourHeight);
+        alert("before redrawing all events");
+        for (a = 0; a<dayNum.length; a++) {
+            drawBox(dayNum[a], hourHeight[a]);
+        }
+    }
+
+    // Tracks user's initial click
+    function mouseDown(eve) {
+        mouseIsDown = true;
         var pos = getMousePos(canvas, eve);
-        endX = pos.x;
-        endY = pos.y;
+        startX = endX = pos.x;
+        startY = endY = pos.y;
+        maxX = startX;
+        maxY = startY;
         drawSquare(); 
     }
-    ctx.clearRect(0,0,c.width,c.height);
-    drawGrid();
-    findLocation();
-    drawBox(dayNum, hourHeight);
-    
-}
 
-// Tracks user's initial click
-function mouseDown(eve) {
-    mouseIsDown = true;
-    var pos = getMousePos(canvas, eve);
-    startX = endX = pos.x;
-    startY = endY = pos.y;
-    maxX = startX;
-    maxY = startY;
-    drawSquare(); 
-}
+    var toolX;
+    var toolY;
+    // Tracks user's drag
+    function mouseMove(eve) {
+        ctx.clearRect(0,0,c.width,c.height);
+        drawGrid();
+        // mouse position
+        var pos = getMousePos(canvas, eve);
 
-var toolX;
-var toolY;
-// Tracks user's drag
-function mouseMove(eve) {
-    ctx.clearRect(0,0,c.width,c.height);
-    drawGrid();
-    // mouse position
-    var pos = getMousePos(canvas, eve);
+        // do drag box
+        if (mouseIsDown !== false) {
+            endX = pos.x;
+            endY = pos.y;
+            if(endX>maxX || endY>maxY){
+                ctx.clearRect(0,0,c.width,c.height);
+                drawGrid(); 
+                maxX=endX;
+                maxY=endY;
+            }
+            if(endX<maxX || endY<maxY){
+            ctx.clearRect(0,0,c.width,c.height);
+            drawGrid();        	
+                maxX = endX;
+                maxY = endY;
 
-    // do drag box
-    if (mouseIsDown !== false) {
-        endX = pos.x;
-        endY = pos.y;
-        if(endX>maxX || endY>maxY){
-        	ctx.clearRect(0,0,c.width,c.height);
-    		drawGrid(); 
-        	maxX=endX;
-        	maxY=endY;
+            }
+            drawSquare();
         }
-        if(endX<maxX || endY<maxY){
-   	 	ctx.clearRect(0,0,c.width,c.height);
-    	drawGrid();        	
-        	maxX = endX;
-        	maxY = endY;
-
-        }
-        drawSquare();
-    }
-    
-    // tooltip
+        
+        // tooltip
     toolX = [pos.x - 50, pos.x - 10];
     toolY = [pos.y, pos.y+20];
     if(toolY[1] > 350){
@@ -154,6 +166,9 @@ function mouseMove(eve) {
 		ctx.fillStyle = 'white';
 		ctx.fillText(tipDisplay,toolX[0]+5,toolY[1]-5);
     
+    for (a = 0; a<dayNum.length; a++) {
+        drawBox(dayNum[a], hourHeight[a]); 
+    }
     
 }
 
@@ -206,8 +221,6 @@ function findLocation (){
       hourTemp.push(i);
     }
   }
-  //alert(hourTemp);
-  //alert(dayTemp);
   
   var timeStart = timeCalc(hourTemp[0]);
   var timeEnd = timeCalc(hourTemp[hourTemp.length-1]);
@@ -216,22 +229,23 @@ function findLocation (){
   var dayEnd = dayTemp[dayTemp.length-1];
 
   
-  alert("Busy from " + timeStart + " to " + timeEnd + " " + dayMap(dayStart) + " through " + dayMap(dayEnd));
-  //post
+  alert("Busy from " + timeStart + " to " + timeEnd + " " + dayStart + " through " + dayEnd);
     
+
+
+  //post API to update the end point
   post_data("/QuickMeet/default/api/username.json", timeStart, timeEnd, dayStart, dayEnd);
-  get_data("/QuickMeet/default/api/username.json");
+  //get_data("/QuickMeet/default/api/username.json");
 
-
-
+  dayNum.push(dayTemp);     
+  hourHeight.push(hourTemp);
   //return values to generate boxes
-  dayNum = dayTemp;
-  hourHeight = hourTemp;
   return dayNum, hourHeight;
   
-
-    // add call to database here!
 }
+
+
+
 
 // maps the hour selected to the time displayed
 function timeCalc(x){
