@@ -154,15 +154,15 @@ function mouseMove(eve) {
     }else if(!tipDisplay){
       tipDisplay = 700;
     }
-    
+    for (a = 0; a<btimeStart.length; a++) {
+      drawBox(btimeStart[a], btimeEnd[a], bdayStart[a], bdayEnd[a]);
+    }  
     // text
 		ctx.font = "14px Arial";
 		ctx.fillStyle = 'white';
 		ctx.fillText(tipDisplay,toolX[0]+5,toolY[1]-5);
 
-    for (a = 0; a<btimeStart.length; a++) {
-      drawBox(btimeStart[a], btimeEnd[a], bdayStart[a], bdayEnd[a]);
-    }   
+ 
     
 }
 
