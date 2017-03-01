@@ -14,7 +14,7 @@ function drawBox(tStart, tEnd, dStart, dEnd){
     //lenth is the difference in times
     Length = ((tEnd-tStart)/100)*tileHeight;
        
-    alert("x coordinate is " + X_coordinate + " y coordinate is " + Y_coordinate + " width is " + Width + " length is " + Length);
+    //alert("x coordinate is " + X_coordinate + " y coordinate is " + Y_coordinate + " width is " + Width + " length is " + Length);
         
     ctx.fillStyle = "rgba(128,0,0,0.5)";
     ctx.fillRect(X_coordinate, Y_coordinate, Width, Length);

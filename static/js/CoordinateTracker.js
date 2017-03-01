@@ -34,7 +34,11 @@ var can = document.getElementById('myCanvas'),
     context = can.getContext('2d'),
     element = [];
 
-var btimeStart, btimeEnd, bdayStart, bdayEnd;
+var btimeStart = [];
+var btimeEnd = [];
+var bdayStart = [];
+var bdayEnd = [];
+
 // ~~~~~~~~~~~~~~~~
 can.addEventListener('mousedown', mouseDown, false);
 can.addEventListener('mousemove', mouseMove, false);
@@ -74,7 +78,10 @@ function mouseUp(eve) {
     ctx.clearRect(0,0,c.width,c.height);
     drawGrid();
     findLocation();
-    drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
+    for (a = 0; a<btimeStart.length; a++) {
+      drawBox(btimeStart[a], btimeEnd[a], bdayStart[a], bdayEnd[a]);
+      console.log(btimeStart[a], btimeEnd[a], bdayStart[a], bdayEnd[a]);
+    }
     
 }
 
@@ -152,7 +159,10 @@ function mouseMove(eve) {
 		ctx.font = "14px Arial";
 		ctx.fillStyle = 'white';
 		ctx.fillText(tipDisplay,toolX[0]+5,toolY[1]-5);
-    
+
+    for (a = 0; a<btimeStart.length; a++) {
+      drawBox(btimeStart[a], btimeEnd[a], bdayStart[a], bdayEnd[a]);
+    }   
     
 }
 
@@ -224,10 +234,10 @@ function findLocation (){
 
 
   //return values to generate boxes
-  btimeStart = timeStart;
-  btimeEnd = timeEnd;
-  bdayStart = dayStart;
-  bdayEnd = dayEnd;
+  btimeStart.push(timeStart);
+  btimeEnd.push(timeEnd);
+  bdayStart.push(dayStart);
+  bdayEnd.push(dayEnd);
   return btimeStart, btimeEnd, bdayStart, bdayEnd;
   
 
