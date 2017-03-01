@@ -102,6 +102,12 @@ var toolY;
 function mouseMove(eve) {
     ctx.clearRect(0,0,c.width,c.height);
     drawGrid();
+    //Draw all the events
+
+    for (a = 0; a<btimeStart.length; a++) {
+      drawBox(btimeStart[a], btimeEnd[a], bdayStart[a], bdayEnd[a]);
+    } 
+
     // mouse position
     var pos = getMousePos(canvas, eve);
 
@@ -111,13 +117,19 @@ function mouseMove(eve) {
         endY = pos.y;
         if(endX>maxX || endY>maxY){
         	ctx.clearRect(0,0,c.width,c.height);
-    		drawGrid(); 
+    		drawGrid();
+            for (a = 0; a<btimeStart.length; a++) {
+                drawBox(btimeStart[a], btimeEnd[a], bdayStart[a], bdayEnd[a]);
+            } 
         	maxX=endX;
         	maxY=endY;
         }
         if(endX<maxX || endY<maxY){
-   	 	ctx.clearRect(0,0,c.width,c.height);
-    	drawGrid();        	
+   	 	    ctx.clearRect(0,0,c.width,c.height);
+    	    drawGrid();
+            for (a = 0; a<btimeStart.length; a++) {
+                drawBox(btimeStart[a], btimeEnd[a], bdayStart[a], bdayEnd[a]);
+            }             
         	maxX = endX;
         	maxY = endY;
 
@@ -154,9 +166,7 @@ function mouseMove(eve) {
     }else if(!tipDisplay){
       tipDisplay = 700;
     }
-    for (a = 0; a<btimeStart.length; a++) {
-      drawBox(btimeStart[a], btimeEnd[a], bdayStart[a], bdayEnd[a]);
-    }  
+ 
     // text
 		ctx.font = "14px Arial";
 		ctx.fillStyle = 'white';
@@ -225,7 +235,7 @@ function findLocation (){
   var dayEnd = dayTemp[dayTemp.length-1];
 
   
-  alert("Busy from " + timeStart + " to " + timeEnd + " " + dayMap(dayStart) + " through " + dayMap(dayEnd));
+  //alert("Busy from " + timeStart + " to " + timeEnd + " " + dayMap(dayStart) + " through " + dayMap(dayEnd));
   //post
     
   post_data("/QuickMeet/default/api/username.json", timeStart, timeEnd, dayStart, dayEnd);
