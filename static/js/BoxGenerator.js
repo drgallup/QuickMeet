@@ -1,18 +1,21 @@
 //BoxGenerator.js
-//draws a box given the arrays of days and hours that are highlited by the mouse
-//takes dayNum and hourHeight from the findLocation() function in coordinateTracker.js
+//draws a box given start and end times as well as the start and end days
+//takes these times from the findLocation() function in coordinateTracker.js
 //Isaac
 
-function drawBox(dayNum, hourHeight){
-    //dayNum is the array of days highlited by mouseclick
-    //hourHeight is the array of hours highlited by mouseclick
-    
-    var height = tileHeight;
-    var width  = dayNum.length*tileWidth;       
-    height = height*hourHeight.length;
+function drawBox(tStart, tEnd, dStart, dEnd){
+
+    //starting x coordinate is determined by the day first clicked on.
+    X_coordinate = dStart*tileWidth+tileWidth;
+    //starting y coordinate is determined by the time first clicked on.
+    Y_coordinate = ((tStart-700)/100)*tileHeight;
+    //width is change in days times the width of the tile
+    Width = ((dEnd-dStart)*tileWidth)+tileWidth;
+    //lenth is the difference in times
+    Length = ((tEnd-tStart)/100)*tileHeight;
        
-    //alert("x coordinate is " + dayNum[0]*tileWidth+tileWidth + "y coordinate is " + hourHeight[0]*tileHeight + "width is " + width + "height is " + height);
+    //alert("x coordinate is " + X_coordinate + " y coordinate is " + Y_coordinate + " width is " + Width + " length is " + Length);
         
     ctx.fillStyle = "rgba(128,0,0,0.5)";
-    ctx.fillRect(dayNum[0]*tileWidth+tileWidth,hourHeight[0]*tileHeight, width, height);
+    ctx.fillRect(X_coordinate, Y_coordinate, Width, Length);
 }
