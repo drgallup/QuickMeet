@@ -34,8 +34,7 @@ var can = document.getElementById('myCanvas'),
     context = can.getContext('2d'),
     element = [];
 
-var dayNum;
-var hourHeight;
+var btimeStart, btimeEnd, bdayStart, bdayEnd;
 // ~~~~~~~~~~~~~~~~
 can.addEventListener('mousedown', mouseDown, false);
 can.addEventListener('mousemove', mouseMove, false);
@@ -75,7 +74,7 @@ function mouseUp(eve) {
     ctx.clearRect(0,0,c.width,c.height);
     drawGrid();
     findLocation();
-    drawBox(dayNum, hourHeight);
+    drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
     
 }
 
@@ -225,9 +224,11 @@ function findLocation (){
 
 
   //return values to generate boxes
-  dayNum = dayTemp;
-  hourHeight = hourTemp;
-  return dayNum, hourHeight;
+  btimeStart = timeStart;
+  btimeEnd = timeEnd;
+  bdayStart = dayStart;
+  bdayEnd = dayEnd;
+  return btimeStart, btimeEnd, bdayStart, bdayEnd;
   
 
     // add call to database here!
