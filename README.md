@@ -24,3 +24,6 @@ Fei 5pm,  3/1/17 load the data from database
 	View: 'default/index.html', 'default/group.html'
 	Static/js: 'BoxGenerator.js', 'CoordinateTracker.js', 'GroupCalendar.js'
 			
+Nathan 4pm 2/20/17. ver. 0.8 CoordinateTracker.js -Fixed dragging issues for box
+
+Dylan 6pm 2/22/17. ver 1.1 CoordinateTracker.js - split sections into 7ths for 10 minute intervals and added tooltips

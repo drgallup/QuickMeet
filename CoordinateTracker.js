@@ -15,7 +15,6 @@
 
 // ~~~~~~~~~~~~~~~~
 // Variables
-
 var day = [ 100, 200,
             300, 400,
             500, 600, 
@@ -32,25 +31,13 @@ var mouseIsDown = false;
 var can = document.getElementById('myCanvas'),
     canLeft = can.offsetLeft,
     canTop = can.offsetTop,
-    context = can.getContext('2d')
-
-var user = getParameterByName("username")
-var data = get_data("/QuickMeet/default/api/"+ user +".json")
+    context = can.getContext('2d'),
+    element = [];
 
 var btimeStart = [];
 var btimeEnd = [];
 var bdayStart = [];
 var bdayEnd = [];
-
-var jsonData = JSON.parse(data);
-for (var i = 0; i < jsonData.length; i++) {
-
-    btimeStart.push(jsonData[i].startTime)
-    btimeEnd.push(jsonData[i].endTime)
-    bdayStart.push(jsonData[i].days[0])
-    bdayEnd.push(jsonData[i].days[jsonData[i].days.length -1])
-}
-
 
 // ~~~~~~~~~~~~~~~~
 can.addEventListener('mousedown', mouseDown, false);
@@ -75,6 +62,7 @@ function hourChange(){
   for(var i=0; i<=(rows*7); i++){
     hour.push( i*tempHeight );
   }
+  //alert(hour);
 }
 
 
@@ -82,23 +70,20 @@ function hourChange(){
 function mouseUp(eve) {    
     if (mouseIsDown != false) {
         mouseIsDown = false;
-        //var pos = getMousePos(canvas, eve);
-        //endX = pos.x;
-        //endY = pos.y;
-        //drawSquare(); 
+        var pos = getMousePos(canvas, eve);
+        endX = pos.x;
+        endY = pos.y;
+        drawSquare(); 
     }
     ctx.clearRect(0,0,c.width,c.height);
     drawGrid();
     findLocation();
-    for (var i = 0; i < btimeStart.length; i++) {
-      drawBox(btimeStart[i], btimeEnd[i], bdayStart[i], bdayEnd[i]);
-    }
-    
+    drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
+    console.log(btimeStart, btimeEnd, bdayStart, bdayEnd);    
 }
 
 // Tracks user's initial click
 function mouseDown(eve) {
-    
     mouseIsDown = true;
     var pos = getMousePos(canvas, eve);
     startX = endX = pos.x;
@@ -115,10 +100,7 @@ function mouseMove(eve) {
     ctx.clearRect(0,0,c.width,c.height);
     drawGrid();
     // mouse position
-    for (var i = 0; i < btimeStart.length; i++) {
-      drawBox(btimeStart[i], btimeEnd[i], bdayStart[i], bdayEnd[i]);
-    }
-   var pos = getMousePos(canvas, eve);
+    var pos = getMousePos(canvas, eve);
 
     // do drag box
     if (mouseIsDown !== false) {
@@ -127,15 +109,15 @@ function mouseMove(eve) {
         if(endX>maxX || endY>maxY){
         	ctx.clearRect(0,0,c.width,c.height);
     		drawGrid(); 
-            for (var i = 0; i < btimeStart.length; i++) {
-                drawBox(btimeStart[i], btimeEnd[i], bdayStart[i], bdayEnd[i]);
-            }
-    		drawGrid();
-            for (a = 0; a<btimeStart.length; a++) {
-                drawBox(btimeStart[a], btimeEnd[a], bdayStart[a], bdayEnd[a]);
-            } 
         	maxX=endX;
         	maxY=endY;
+        }
+        if(endX<maxX || endY<maxY){
+   	 	ctx.clearRect(0,0,c.width,c.height);
+    	drawGrid();        	
+        	maxX = endX;
+        	maxY = endY;
+
         }
         drawSquare();
     }
@@ -169,11 +151,13 @@ function mouseMove(eve) {
     }else if(!tipDisplay){
       tipDisplay = 700;
     }
-    
+    drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
     // text
 		ctx.font = "14px Arial";
 		ctx.fillStyle = 'white';
 		ctx.fillText(tipDisplay,toolX[0]+5,toolY[1]-5);
+
+ 
     
 }
 
@@ -226,7 +210,8 @@ function findLocation (){
       hourTemp.push(i);
     }
   }
-
+  //alert(hourTemp);
+  //alert(dayTemp);
   
   var timeStart = timeCalc(hourTemp[0]);
   var timeEnd = timeCalc(hourTemp[hourTemp.length-1]);
@@ -235,19 +220,22 @@ function findLocation (){
   var dayEnd = dayTemp[dayTemp.length-1];
 
   
-  //alert("Busy from " + timeStart + " to " + timeEnd + " " + dayMap(dayStart) + " through " + dayMap(dayEnd));
-  var user = getParameterByName("username")  
-  post_data("/QuickMeet/default/api/"+ user +".json", timeStart, timeEnd, dayStart, dayEnd);
-  //get_data("/QuickMeet/default/api/"+ user +".json");
+  alert("Busy from " + timeStart + " to " + timeEnd + " " + dayMap(dayStart) + " through " + dayMap(dayEnd));
+  //post
+    
+  post_data("/QuickMeet/default/api/username.json", timeStart, timeEnd, dayStart, dayEnd);
+  get_data("/QuickMeet/default/api/username.json");
 
 
+
+  //return values to generate boxes
   btimeStart.push(timeStart);
   btimeEnd.push(timeEnd);
   bdayStart.push(dayStart);
   bdayEnd.push(dayEnd);
   return btimeStart, btimeEnd, bdayStart, bdayEnd;
-
   
+
     // add call to database here!
 }
 
@@ -276,13 +264,6 @@ function dayMap(x){
     default:
       return "Error: Invalid Day";
   }
-}
-
-function group(){
-        var user = getParameterByName("username")
-        //window.location.href="login.jsp?backurl="+window.location.href;
-        //window.location.href= "http://127.0.0.1:8000/Quickmeet/default/group"
-        window.open("http://127.0.0.1:8000/Quickmeet/default/group?"+"username="+user,"_blank");
     
 }
 
@@ -298,19 +279,5 @@ function post_data(URL, tStart, tEnd, dStart, dEnd){
     var x = new XMLHttpRequest();
     x.open( "GET", URL, false ); // false for synchronous request
     x.send( null );
-    return x.responseText;
-}
-
-
-function getParameterByName(name, url) {
-    if (!url) {
-      url = window.location.href;
-    }
-    name = name.replace(/[\[\]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
     //alert(x.responseText);
 }
