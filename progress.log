@@ -48,3 +48,6 @@
 [2017-01-31 22:46:10] EDIT QuickMeet/views/default/index.html: 0
 [2017-01-31 22:47:07] EDIT QuickMeet/views/default/index.html: 1
 [2017-01-31 22:51:17] CREATE db.quick_meet.py: 0
+[2017-03-03 04:18:47] EDIT QuickMeet/static/js/Setup.js: 23
+[2017-03-03 04:19:37] EDIT QuickMeet/static/js/Setup.js: 0
+[2017-03-03 04:20:06] EDIT QuickMeet/static/js/Setup.js: 0

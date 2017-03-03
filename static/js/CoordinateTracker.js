@@ -44,6 +44,10 @@ can.addEventListener('mousedown', mouseDown, false);
 can.addEventListener('mousemove', mouseMove, false);
 can.addEventListener('mouseup', mouseUp, false);
 
+
+//Continue off from the setup script, load the user's data and draw
+
+
 // tooltip
 // http://stackoverflow.com/questions/15702867/html-tooltip-position-relative-to-mouse-pointer
 var tooltipSpan = document.getElementById('tooltip-span');
@@ -237,9 +241,9 @@ function findLocation (){
   
   //alert("Busy from " + timeStart + " to " + timeEnd + " " + dayMap(dayStart) + " through " + dayMap(dayEnd));
   //post
-    
-  post_data("/QuickMeet/default/api/username.json", timeStart, timeEnd, dayStart, dayEnd);
-  get_data("/QuickMeet/default/api/username.json");
+  
+  var endPoint = "/QuickMeet/default/api/" + user + ".json"; 
+  post_data(endPoint, timeStart, timeEnd, dayStart, dayEnd);
 
 
 
@@ -282,17 +286,4 @@ function dayMap(x){
     
 }
 
-function post_data(URL, tStart, tEnd, dStart, dEnd){
-    var x = new XMLHttpRequest();
-    x.open('POST', URL, false);
-    x.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    x.send("timeStart=" + tStart + "&timeEnd=" + tEnd + "&dayStart=" + dStart + "&dayEnd=" + dEnd);
-    //alert(x.responseText);
-}
 
-    function get_data(URL){
-    var x = new XMLHttpRequest();
-    x.open( "GET", URL, false ); // false for synchronous request
-    x.send( null );
-    //alert(x.responseText);
-}
