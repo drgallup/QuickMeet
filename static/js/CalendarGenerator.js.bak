@@ -58,4 +58,4 @@ function drawGrid(){
 	ctx.stroke();
 }
 
-drawGrid();
+//drawGrid();

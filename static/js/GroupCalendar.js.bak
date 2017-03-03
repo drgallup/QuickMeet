@@ -57,7 +57,7 @@ function add() {
               console.log(groupMember)
 //auto append all the name of group member
             var str = $('#list').html();
-          $('#list').html(str + '<li>' + newUser + "<button type='button' onClick='deleteMember(this)'>delete</button>" + '</li>');
+          $('#list').html(str + '<li>' + newUser +"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"+ "<button type='button' onClick='deleteMember(this)'>delete</button>" + '</li>');
           })
       }
 

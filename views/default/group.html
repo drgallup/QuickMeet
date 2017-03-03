@@ -22,31 +22,32 @@
     Your browser does not support the HTML5 canvas tag.
     </canvas>
 
-    <form action="http://127.0.0.1:8000/Quickmeet/default">       
-        <input type="submit" value="Return" />
-            <form action="http://google.com">
-                <input type="submit" value="Generate Available Times" />
-                    <form action="http://google.com">       
-                         <input type="submit" value="Settings" />
-            </form>
-        </form>
+
+
+
+
+  
+<br>
+
+<font size="4">Member:</font>
+
+<ul id="list" style="list-style:none" vertical-align:top></ul>
+
+<form class="" action="index.html" method="get">
+
+
+      <input id="member" type="text" name="member"
+       onkeydown = "if (event.keyCode == 13) {add();event.returnValue=false;event.cancel=true;}"  >
+
+      <input type="button" name="" value="add memeber" onclick="add()">
+      <input type="button" value="Return" onClick = "returnEdit()" />
     </form>
-
-
+<br>
+<br>
+<br>
     <script src = "{{=URL('static','js/CalendarGenerator.js')}}">
     </script>
     <script src ="{{=URL('static','js/BoxGenerator.js')}}">
     </script>
     <script src ="{{=URL('static','js/GroupCalendar.js')}}">
     </script>
-  
-    
-
-    
-
-<form>
-GroupMember:<br>
-<input type="text" name="member" value="">
-
-<input type="submit" value="Add" onClick="addMember()">
-</form>

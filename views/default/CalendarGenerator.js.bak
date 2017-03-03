@@ -2,12 +2,11 @@
 //  CalendarGenerator.js
 //  generates the calendar for quick calendar
 //
-//  Version 0.4 - Nathan, 10am, 2/3/17
+//  Version 0.3 - Nathan, 4pm, 1/25/17
 //  - Loads canvas from index.html
 //  - Makes it 2d
 //  - Draws grid
 //  - Indents Calendar for room for times
-//  - Fixed time colors
 // --------------------------------------------------------------------
 
 // get the canvas we are working on
@@ -43,15 +42,14 @@ function findTime(test){
 //Draws grid
 function drawGrid(){
 	for (var x = 0; x-1<=width; x+=tileWidth){
-		ctx.moveTo(x+100,0);
-		ctx.lineTo(x+100,height);
+		ctx.moveTo(x+10,0);
+		ctx.lineTo(x+10,height);
 	}
 
 	for (var y = 0; y-1<=height; y+=tileHeight){
 		ctx.moveTo(100,y);
 		ctx.lineTo(width+100,y);
 		ctx.font = "14px Arial";
-		ctx.fillStyle = 'black';
 		ctx.fillText(findTime(y),0,y+tileHeight);
 	}
 	ctx.strokeStyle = "black";
