@@ -2,6 +2,8 @@
 
     <h1>QuickMeet</h1>
 
+
+
     <!-- Lists days over grid-->
 
   <link rel="stylesheet" href="{{=URL('static','css/calendar.css')}}">
@@ -16,24 +18,12 @@
         <td>Friday</td>
         <td>Saturday</td>
       </tr>
-    </table>  
+    </table>
+
 
     <canvas id="myCanvas" width="800" height="400">
     Your browser does not support the HTML5 canvas tag.
     </canvas>
-
-    <form action="http://127.0.0.1:8000/Quickmeet/default/groupCalendar">       
-        <input type="submit" value="Create Group" />
-            <form action="http://google.com">
-                <input type="submit" value="Generate Available Times" />
-                    <form action="http://google.com">       
-                         <input type="submit" value="Settings" />
-            </form>
-        </form>
-    </form>
-
-    
-
 
     <script src ="{{=URL('static','js/CalendarGenerator.js')}}">
     </script>
@@ -43,3 +33,18 @@
 
     <script src ="{{=URL('static','js/BoxGenerator.js')}}">
     </script>
+
+
+
+
+
+
+
+<form>
+    <font size="4">username:</font>
+<input type="text" name="username" value="">
+
+<input type="submit" value="Submit">
+<input type="button" value="Create Group" onClick = "group()" />
+</form>
+<br><br><br>

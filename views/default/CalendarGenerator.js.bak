@@ -42,8 +42,8 @@ function findTime(test){
 //Draws grid
 function drawGrid(){
 	for (var x = 0; x-1<=width; x+=tileWidth){
-		ctx.moveTo(x+100,0);
-		ctx.lineTo(x+100,height);
+		ctx.moveTo(x+10,0);
+		ctx.lineTo(x+10,height);
 	}
 
 	for (var y = 0; y-1<=height; y+=tileHeight){
