@@ -39,6 +39,9 @@ var btimeEnd = [];
 var bdayStart = [];
 var bdayEnd = [];
 
+
+
+
 // ~~~~~~~~~~~~~~~~
 can.addEventListener('mousedown', mouseDown, false);
 can.addEventListener('mousemove', mouseMove, false);
@@ -68,6 +71,7 @@ function hourChange(){
 
 // Updates coordinates to generate box
 function mouseUp(eve) {    
+	var deletion = document.getElementById('deleteswitch').checked;
     if (mouseIsDown != false) {
         mouseIsDown = false;
         var pos = getMousePos(canvas, eve);
@@ -77,7 +81,12 @@ function mouseUp(eve) {
     }
     ctx.clearRect(0,0,c.width,c.height);
     drawGrid();
-    findLocation();
+    if(deletion==false){
+    	findLocation();
+	}
+	if(deletion==true){
+		findDeletion();
+	}
     for (a = 0; a<btimeStart.length; a++) {
       drawBox(btimeStart[a], btimeEnd[a], bdayStart[a], bdayEnd[a]);
       console.log(btimeStart[a], btimeEnd[a], bdayStart[a], bdayEnd[a]);
@@ -102,6 +111,12 @@ var toolY;
 function mouseMove(eve) {
     ctx.clearRect(0,0,c.width,c.height);
     drawGrid();
+    //Draw all the events
+
+    for (a = 0; a<btimeStart.length; a++) {
+      drawBox(btimeStart[a], btimeEnd[a], bdayStart[a], bdayEnd[a]);
+    } 
+
     // mouse position
     var pos = getMousePos(canvas, eve);
 
@@ -111,13 +126,19 @@ function mouseMove(eve) {
         endY = pos.y;
         if(endX>maxX || endY>maxY){
         	ctx.clearRect(0,0,c.width,c.height);
-    		drawGrid(); 
+    		drawGrid();
+            for (a = 0; a<btimeStart.length; a++) {
+                drawBox(btimeStart[a], btimeEnd[a], bdayStart[a], bdayEnd[a]);
+            } 
         	maxX=endX;
         	maxY=endY;
         }
         if(endX<maxX || endY<maxY){
-   	 	ctx.clearRect(0,0,c.width,c.height);
-    	drawGrid();        	
+   	 	    ctx.clearRect(0,0,c.width,c.height);
+    	    drawGrid();
+            for (a = 0; a<btimeStart.length; a++) {
+                drawBox(btimeStart[a], btimeEnd[a], bdayStart[a], bdayEnd[a]);
+            }             
         	maxX = endX;
         	maxY = endY;
 
@@ -154,15 +175,13 @@ function mouseMove(eve) {
     }else if(!tipDisplay){
       tipDisplay = 700;
     }
-    
+ 
     // text
 		ctx.font = "14px Arial";
 		ctx.fillStyle = 'white';
 		ctx.fillText(tipDisplay,toolX[0]+5,toolY[1]-5);
 
-    for (a = 0; a<btimeStart.length; a++) {
-      drawBox(btimeStart[a], btimeEnd[a], bdayStart[a], bdayEnd[a]);
-    }   
+ 
     
 }
 
@@ -190,6 +209,54 @@ function getMousePos(canvas, evt) {
         y: evt.clientY - rect.top
     };
 }
+
+function findDeletion(){
+  var dayTemp = [];
+  var hourTemp = [];	
+  for (var i = 0; i<day.length-1; i++){
+    if( day[i] < startX && startX < day[i+1] ){
+      dayTemp.push(i);
+    }else if( startX < day[i] && day[i+1] < endX ){
+      dayTemp.push(i);
+    }else if( day[i] < endX && endX < day[i+1] ){
+      dayTemp.push(i);
+    }
+  }
+
+  for (var i = 0; i<hour.length-1; i++){
+    if( hour[i] < startY && startY < hour[i+1] ){
+      hourTemp.push(i);
+    }else if( startY < hour[i] && hour[i+1] < endY ){
+      hourTemp.push(i);
+    }else if( hour[i] < endY && endY < hour[i+1] ){
+      hourTemp.push(i);
+    }
+  }
+  var timeStart = timeCalc(hourTemp[0]);
+  var timeEnd = timeCalc(hourTemp[hourTemp.length-1]);
+
+  var dayStart = dayTemp[0];
+  var dayEnd = dayTemp[dayTemp.length-1];
+  var counter = 0;
+
+  for (a = btimeStart.length-1; a>=0; a--) {
+        if((btimeStart[a]<=timeStart) && (timeEnd<=btimeEnd[a]) && (bdayStart[a]<=dayStart) && (dayEnd<=bdayEnd[a])){
+        	alert(a + " true");
+        	btimeStart.splice(a,1);
+        	btimeEnd.splice(a,1);
+        	bdayStart.splice(a,1);
+        	bdayEnd.splice(a,1);
+        	counter = counter + 1;
+        	ctx.clearRect(0,0,c.width,c.height);
+        	drawGrid();
+        	drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd); 
+        	console.log("Deleted");
+        	break;
+        } 
+    }
+}
+
+
 
 function findLocation (){
   // figures out which hours on the calendar have been selected
@@ -225,7 +292,7 @@ function findLocation (){
   var dayEnd = dayTemp[dayTemp.length-1];
 
   
-  alert("Busy from " + timeStart + " to " + timeEnd + " " + dayMap(dayStart) + " through " + dayMap(dayEnd));
+  //alert("Busy from " + timeStart + " to " + timeEnd + " " + dayMap(dayStart) + " through " + dayMap(dayEnd));
   //post
     
   post_data("/QuickMeet/default/api/username.json", timeStart, timeEnd, dayStart, dayEnd);
@@ -272,7 +339,7 @@ function dayMap(x){
     
 }
 
-function post_data(URL, tStart, tEnd, dStart, dEnd){
+function post_data(URL, tStart, tEnd, dStart, dEnd) {
     var x = new XMLHttpRequest();
     x.open('POST', URL, false);
     x.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -280,7 +347,7 @@ function post_data(URL, tStart, tEnd, dStart, dEnd){
     //alert(x.responseText);
 }
 
-    function get_data(URL){
+function get_data(URL) {
     var x = new XMLHttpRequest();
     x.open( "GET", URL, false ); // false for synchronous request
     x.send( null );
