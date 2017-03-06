@@ -32,16 +32,22 @@ var mouseIsDown = false;
 var can = document.getElementById('myCanvas'),
     canLeft = can.offsetLeft,
     canTop = can.offsetTop,
-    context = can.getContext('2d')
+    context = can.getContext('2d');
 
 //get the calendar owner's name
-var user = getParameterByName("username")
+if (getParameterByName("username") != null) {
+    user = getParameterByName("username");
+    console.log(user);
+}
+
 //create these 4 array to store calendar's events data
-var btimeStart = [];
-var btimeEnd = [];
-var bdayStart = [];
-var bdayEnd = [];
+//Already defined in setup
+//var btimeStart = [];
+//var btimeEnd = [];
+//var bdayStart = [];
+//var bdayEnd = [];
 //get the calendar owner's all events, and then draw the box
+console.log(user);
 get_Data("/QuickMeet/default/api/"+ user +".json",function(data){
     var jsonData = JSON.parse(data);
     for (var i = 0; i < jsonData.length; i++) {
@@ -118,7 +124,7 @@ var toolY;
 function mouseMove(eve) {
     ctx.clearRect(0,0,c.width,c.height);
     drawGrid();
-    // mouse position
+    // mouse position 
     drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
     var pos = getMousePos(canvas, eve);
 
@@ -245,7 +251,6 @@ function findLocation (){
   console.log("Busy from " + timeStart + " to " + timeEnd + " " + dayMap(dayStart) + " through " + dayMap(dayEnd));
   //post
   
-  var user = getParameterByName("username")  
   post_data("/QuickMeet/default/api/"+ user +".json", timeStart, timeEnd, dayStart, dayEnd);
 
   btimeStart.push(timeStart);
@@ -286,8 +291,7 @@ function dayMap(x){
 
 //link the 'CREATE GROUP' button in the main page, redirect user to group calendar
 function group(){
-        var user = getParameterByName("username")
-        window.location.href = "http://127.0.0.1:8000/Quickmeet/default/group?"+"username="+user
+        window.location.href = "Quickmeet/default/group?"+"username="+user
 }
 
 //http 'POST' method
@@ -312,15 +316,3 @@ function get_Data(theUrl, callback)
 }
 
 
-//function to get the calendar owner's name
-function getParameterByName(name, url) {
-    if (!url) {
-      url = window.location.href;
-    }
-    name = name.replace(/[\[\]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
-}
