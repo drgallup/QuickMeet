@@ -15,11 +15,12 @@
 
 // ~~~~~~~~~~~~~~~~
 // Variables
+
 var day = [ 100, 200,
             300, 400,
-            500, 600, 
+            500, 600,
             700, 800 ];
-            
+
 // will be filled with the pixel locations of the intervals used (currently 10 minutes)
 var hour = [];
 
@@ -31,13 +32,26 @@ var mouseIsDown = false;
 var can = document.getElementById('myCanvas'),
     canLeft = can.offsetLeft,
     canTop = can.offsetTop,
-    context = can.getContext('2d'),
-    element = [];
+    context = can.getContext('2d')
 
+//get the calendar owner's name
+var user = getParameterByName("username")
+//create these 4 array to store calendar's events data
 var btimeStart = [];
 var btimeEnd = [];
 var bdayStart = [];
 var bdayEnd = [];
+//get the calendar owner's all events, and then draw the box
+get_Data("/QuickMeet/default/api/"+ user +".json",function(data){
+    var jsonData = JSON.parse(data);
+    for (var i = 0; i < jsonData.length; i++) {
+        btimeStart.push(jsonData[i].startTime)
+        btimeEnd.push(jsonData[i].endTime)
+        bdayStart.push(jsonData[i].days[0])
+        bdayEnd.push(jsonData[i].days[jsonData[i].days.length -1])
+    }
+    drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
+})
 
 
 
@@ -65,44 +79,35 @@ function hourChange(){
   for(var i=0; i<=(rows*7); i++){
     hour.push( i*tempHeight );
   }
-  //alert(hour);
 }
 
 
 // Updates coordinates to generate box
 function mouseUp(eve) {    
-	var deletion = document.getElementById('deleteswitch').checked;
     if (mouseIsDown != false) {
         mouseIsDown = false;
-        var pos = getMousePos(canvas, eve);
-        endX = pos.x;
-        endY = pos.y;
-        drawSquare(); 
+        //var pos = getMousePos(canvas, eve);
+        //endX = pos.x;
+        //endY = pos.y;
+        //drawSquare(); 
     }
     ctx.clearRect(0,0,c.width,c.height);
     drawGrid();
-    if(deletion==false){
-    	findLocation();
-	}
-	if(deletion==true){
-		findDeletion();
-	}
-    for (a = 0; a<btimeStart.length; a++) {
-      drawBox(btimeStart[a], btimeEnd[a], bdayStart[a], bdayEnd[a]);
-      console.log(btimeStart[a], btimeEnd[a], bdayStart[a], bdayEnd[a]);
-    }
+    findLocation();
+    drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
+     
     
 }
 
 // Tracks user's initial click
 function mouseDown(eve) {
+    
     mouseIsDown = true;
     var pos = getMousePos(canvas, eve);
     startX = endX = pos.x;
     startY = endY = pos.y;
     maxX = startX;
     maxY = startY;
-    drawSquare(); 
 }
 
 var toolX;
@@ -111,13 +116,8 @@ var toolY;
 function mouseMove(eve) {
     ctx.clearRect(0,0,c.width,c.height);
     drawGrid();
-    //Draw all the events
-
-    for (a = 0; a<btimeStart.length; a++) {
-      drawBox(btimeStart[a], btimeEnd[a], bdayStart[a], bdayEnd[a]);
-    } 
-
     // mouse position
+    drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
     var pos = getMousePos(canvas, eve);
 
     // do drag box
@@ -126,19 +126,15 @@ function mouseMove(eve) {
         endY = pos.y;
         if(endX>maxX || endY>maxY){
         	ctx.clearRect(0,0,c.width,c.height);
-    		drawGrid();
-            for (a = 0; a<btimeStart.length; a++) {
-                drawBox(btimeStart[a], btimeEnd[a], bdayStart[a], bdayEnd[a]);
-            } 
+    		drawGrid(); 
+            drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
         	maxX=endX;
         	maxY=endY;
         }
         if(endX<maxX || endY<maxY){
-   	 	    ctx.clearRect(0,0,c.width,c.height);
-    	    drawGrid();
-            for (a = 0; a<btimeStart.length; a++) {
-                drawBox(btimeStart[a], btimeEnd[a], bdayStart[a], bdayEnd[a]);
-            }             
+   	 	ctx.clearRect(0,0,c.width,c.height);
+    	drawGrid();
+            drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
         	maxX = endX;
         	maxY = endY;
 
@@ -175,13 +171,12 @@ function mouseMove(eve) {
     }else if(!tipDisplay){
       tipDisplay = 700;
     }
- 
+    
     // text
 		ctx.font = "14px Arial";
 		ctx.fillStyle = 'white';
 		ctx.fillText(tipDisplay,toolX[0]+5,toolY[1]-5);
-
- 
+    
     
 }
 
@@ -210,54 +205,6 @@ function getMousePos(canvas, evt) {
     };
 }
 
-function findDeletion(){
-  var dayTemp = [];
-  var hourTemp = [];	
-  for (var i = 0; i<day.length-1; i++){
-    if( day[i] < startX && startX < day[i+1] ){
-      dayTemp.push(i);
-    }else if( startX < day[i] && day[i+1] < endX ){
-      dayTemp.push(i);
-    }else if( day[i] < endX && endX < day[i+1] ){
-      dayTemp.push(i);
-    }
-  }
-
-  for (var i = 0; i<hour.length-1; i++){
-    if( hour[i] < startY && startY < hour[i+1] ){
-      hourTemp.push(i);
-    }else if( startY < hour[i] && hour[i+1] < endY ){
-      hourTemp.push(i);
-    }else if( hour[i] < endY && endY < hour[i+1] ){
-      hourTemp.push(i);
-    }
-  }
-  var timeStart = timeCalc(hourTemp[0]);
-  var timeEnd = timeCalc(hourTemp[hourTemp.length-1]);
-
-  var dayStart = dayTemp[0];
-  var dayEnd = dayTemp[dayTemp.length-1];
-  var counter = 0;
-
-  for (a = btimeStart.length-1; a>=0; a--) {
-        if((btimeStart[a]<=timeStart) && (timeEnd<=btimeEnd[a]) && (bdayStart[a]<=dayStart) && (dayEnd<=bdayEnd[a])){
-        	alert(a + " true");
-        	btimeStart.splice(a,1);
-        	btimeEnd.splice(a,1);
-        	bdayStart.splice(a,1);
-        	bdayEnd.splice(a,1);
-        	counter = counter + 1;
-        	ctx.clearRect(0,0,c.width,c.height);
-        	drawGrid();
-        	drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd); 
-        	console.log("Deleted");
-        	break;
-        } 
-    }
-}
-
-
-
 function findLocation (){
   // figures out which hours on the calendar have been selected
   var dayTemp = [];
@@ -282,33 +229,28 @@ function findLocation (){
       hourTemp.push(i);
     }
   }
-  //alert(hourTemp);
-  //alert(dayTemp);
+
   
   var timeStart = timeCalc(hourTemp[0]);
   var timeEnd = timeCalc(hourTemp[hourTemp.length-1]);
 
+  //var timeStart = hourTemp[0];
+ //var timeEnd = hourTemp[hourTemp.length-1];
   var dayStart = dayTemp[0];
   var dayEnd = dayTemp[dayTemp.length-1];
 
   
-  //alert("Busy from " + timeStart + " to " + timeEnd + " " + dayMap(dayStart) + " through " + dayMap(dayEnd));
+  console.log("Busy from " + timeStart + " to " + timeEnd + " " + dayMap(dayStart) + " through " + dayMap(dayEnd));
   //post
-    
-  post_data("/QuickMeet/default/api/username.json", timeStart, timeEnd, dayStart, dayEnd);
-  get_data("/QuickMeet/default/api/username.json");
+  var user = getParameterByName("username")  
+  post_data("/QuickMeet/default/api/"+ user +".json", timeStart, timeEnd, dayStart, dayEnd);
 
-
-
-  //return values to generate boxes
   btimeStart.push(timeStart);
   btimeEnd.push(timeEnd);
   bdayStart.push(dayStart);
   bdayEnd.push(dayEnd);
   return btimeStart, btimeEnd, bdayStart, bdayEnd;
-  
 
-    // add call to database here!
 }
 
 // maps the hour selected to the time displayed
@@ -336,10 +278,16 @@ function dayMap(x){
     default:
       return "Error: Invalid Day";
   }
-    
 }
 
-function post_data(URL, tStart, tEnd, dStart, dEnd) {
+//link the 'CREATE GROUP' button in the main page, redirect user to group calendar
+function group(){
+        var user = getParameterByName("username")
+        window.location.href = "http://127.0.0.1:8000/Quickmeet/default/group?"+"username="+user
+}
+
+//http 'POST' method
+function post_data(URL, tStart, tEnd, dStart, dEnd){
     var x = new XMLHttpRequest();
     x.open('POST', URL, false);
     x.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -347,9 +295,28 @@ function post_data(URL, tStart, tEnd, dStart, dEnd) {
     //alert(x.responseText);
 }
 
-function get_data(URL) {
-    var x = new XMLHttpRequest();
-    x.open( "GET", URL, false ); // false for synchronous request
-    x.send( null );
-    //alert(x.responseText);
+//http 'GET' method
+function get_Data(theUrl, callback)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() { 
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            callback(xmlHttp.responseText);
+    }
+    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+    xmlHttp.send(null);
+}
+
+
+//function to get the calendar owner's name
+function getParameterByName(name, url) {
+    if (!url) {
+      url = window.location.href;
+    }
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
