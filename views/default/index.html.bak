@@ -1,19 +1,25 @@
-<p>QuickMeet</p>
+{{extend 'layout.html'}}
+
+    <h1>QuickMeet</h1>
+
+
 
     <!-- Lists days over grid-->
 
-  <link rel="stylesheet" href="{{=URL('static','css/calendar.css')}}"/>
-    <table style="margin-left:100px; width: 700px" >
+  <link rel="stylesheet" href="{{=URL('static','css/calendar.css')}}">
+    <table class="header">
       <tr>
+        <td></td>
+        <td>Sunday</td>
         <td>Monday</td>
         <td>Tuesday</td>
         <td>Wednesday</td>
         <td>Thursday</td>
         <td>Friday</td>
         <td>Saturday</td>
-        <td>Sunday</td>
       </tr>
-    </table>  
+    </table>
+
 
     <canvas id="myCanvas" width="800" height="400">
     Your browser does not support the HTML5 canvas tag.
@@ -24,3 +30,21 @@
   
     <script src = "{{=URL('static','js/CoordinateTracker.js')}}">
     </script>
+
+    <script src ="{{=URL('static','js/BoxGenerator.js')}}">
+    </script>
+
+
+
+
+
+
+
+<form>
+    <font size="4">username:</font>
+<input type="text" name="username" value="">
+
+<input type="submit" value="Submit">
+<input type="submit" value="Create Group" onClick = "group()" />
+</form>
+<br><br><br>

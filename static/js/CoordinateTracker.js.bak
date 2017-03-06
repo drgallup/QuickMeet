@@ -61,10 +61,6 @@ can.addEventListener('mousedown', mouseDown, false);
 can.addEventListener('mousemove', mouseMove, false);
 can.addEventListener('mouseup', mouseUp, false);
 
-
-//Continue off from the setup script, load the user's data and draw
-
-
 // tooltip
 // http://stackoverflow.com/questions/15702867/html-tooltip-position-relative-to-mouse-pointer
 var tooltipSpan = document.getElementById('tooltip-span');
@@ -99,6 +95,8 @@ function mouseUp(eve) {
     drawGrid();
     findLocation();
     drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
+     
+    
 }
 
 // Tracks user's initial click
@@ -244,7 +242,6 @@ function findLocation (){
   
   console.log("Busy from " + timeStart + " to " + timeEnd + " " + dayMap(dayStart) + " through " + dayMap(dayEnd));
   //post
-  
   var user = getParameterByName("username")  
   post_data("/QuickMeet/default/api/"+ user +".json", timeStart, timeEnd, dayStart, dayEnd);
 
@@ -282,7 +279,6 @@ function dayMap(x){
       return "Error: Invalid Day";
   }
 }
-
 
 //link the 'CREATE GROUP' button in the main page, redirect user to group calendar
 function group(){
