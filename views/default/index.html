@@ -3,18 +3,10 @@
     <h1>QuickMeet</h1>
 
 
-<style type="text/css">
-    div.relative {
-    position: relative;
-    left: 90%;
-    top: 70%;
-}
-</style>
+
     <!-- Lists days over grid-->
 
   <link rel="stylesheet" href="{{=URL('static','css/calendar.css')}}">
- <link rel="stylesheet" href="{{=URL('static','css/switch.css')}}">
-
     <table class="header">
       <tr>
         <td></td>
@@ -27,46 +19,11 @@
         <td>Saturday</td>
       </tr>
     </table>
- 
+
 
     <canvas id="myCanvas" width="800" height="400">
     Your browser does not support the HTML5 canvas tag.
     </canvas>
-
-<table class="header"> 
-<tr>
-<td>
-    &nbsp;
-</td>
-<td>
-    <form action="http://127.0.0.1:8000/Quickmeet/default/groupCalendar"> 
-    <input type="submit" value="Create Group" /></form>
-</td>
-<td>
-    <form action="http://google.com">
-    <input type="submit" value="Generate Available Times" /></form>
-</td>
-<td>
-     <form action="http://google.com">       
-      <input type="submit" value="Settings" /> </form>
-
-
-</td>
-<td>
-Deletetion Mode &emsp;&emsp;&emsp;
-<div class="onoffswitch">
-
-    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="deleteswitch">
-    <label class="onoffswitch-label" for="deleteswitch">
-        <span class="onoffswitch-inner"></span>
-        <span class="onoffswitch-switch"></span>
-    </label>
-</div>
-</td>
-</tr>
-</table>
-    
-
 
     <script src ="{{=URL('static','js/CalendarGenerator.js')}}">
     </script>
@@ -76,3 +33,21 @@ Deletetion Mode &emsp;&emsp;&emsp;
 
     <script src ="{{=URL('static','js/BoxGenerator.js')}}">
     </script>
+    
+    <script src ="{{=URL('static','js/Undo.js')}}">
+    </script>
+
+
+
+
+
+
+
+<form>
+    <font size="4">username:</font>
+<input type="text" name="username" value="">
+
+<input type="submit" value="Submit">
+<input type="button" value="Create Group" onClick = "group()" />
+</form>
+<br><br><br>
