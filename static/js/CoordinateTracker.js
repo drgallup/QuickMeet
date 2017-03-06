@@ -48,7 +48,7 @@ if (getParameterByName("username") != null) {
 //var bdayEnd = [];
 //get the calendar owner's all events, and then draw the box
 console.log(user);
-get_Data("/QuickMeet/default/api/"+ user +".json",function(data){
+get_data("/QuickMeet/default/api/"+ user +".json",function(data){
     var jsonData = JSON.parse(data);
     for (var i = 0; i < jsonData.length; i++) {
         btimeStart.push(jsonData[i].startTime)
@@ -293,26 +293,4 @@ function dayMap(x){
 function group(){
         window.location.href = "Quickmeet/default/group?"+"username="+user
 }
-
-//http 'POST' method
-function post_data(URL, tStart, tEnd, dStart, dEnd){
-    var x = new XMLHttpRequest();
-    x.open('POST', URL, false);
-    x.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    x.send("timeStart=" + tStart + "&timeEnd=" + tEnd + "&dayStart=" + dStart + "&dayEnd=" + dEnd);
-    //alert(x.responseText);
-}
-
-//http 'GET' method
-function get_Data(theUrl, callback)
-{
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() { 
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-            callback(xmlHttp.responseText);
-    }
-    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
-    xmlHttp.send(null);
-}
-
 
