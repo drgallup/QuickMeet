@@ -294,7 +294,7 @@ function findLocation (){
   console.log("Busy from " + timeStart + " to " + timeEnd + " " + dayMap(dayStart) + " through " + dayMap(dayEnd));
   //post
   var user = getParameterByName("username")  
-  post_data("/QuickMeet/default/api/"+ user +".json", timeStart, timeEnd, dayStart, dayEnd);
+  post_data("/QuickMeet/default/api/"+ user + "/0" +".json", timeStart, timeEnd, dayStart, dayEnd);
 
   btimeStart.push(timeStart);
   btimeEnd.push(timeEnd);
