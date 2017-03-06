@@ -22,7 +22,3 @@ Fei & Kevin, 8am 2/8/17, ver. 0.7 CoordinateTracker.js -Update the database via 
 Nathan 4pm 2/20/17, ver. 0.8 CoordinateTracker.js -Fixed dragging issues for box
 
 Dylan 6pm 2/22/17, ver 1.1 CoordinateTracker.js - split sections into 7ths for 10 minute intervals and added tooltips
-
-Nathan 5pm 3/4/17, ver 1.2 CoordinateTracker.js - added deletion function, doesn't update database
-
-Nathan 5pm 3/4/17, switch.css - css for deletion switch
