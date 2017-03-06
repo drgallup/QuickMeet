@@ -83,7 +83,8 @@ function hourChange(){
 
 
 // Updates coordinates to generate box
-function mouseUp(eve) {    
+function mouseUp(eve) {
+	var deletion = document.getElementById('deleteswitch').checked;
     if (mouseIsDown != false) {
         mouseIsDown = false;
         //var pos = getMousePos(canvas, eve);
