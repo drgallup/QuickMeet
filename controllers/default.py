@@ -42,7 +42,7 @@ def user():
     """
     return dict(form=auth())
 
-def groupCalendar():
+def group():
     return locals()
     
 
@@ -74,8 +74,8 @@ def api():
     def GET(*args,**vars):
         uid = args[0]
         data = db(db.events.username == uid).select()
-        return json.dumps([[r.username, r.startTime, r.endTime, r.days] for r in data])
-
+        return json.dumps([{'username': r.username, 'startTime': r.startTime, 'endTime': r.endTime, 'days': r.days} for r in data])
+        #return json.dumps({'username': r.username, 'startTime': r.startTime, 'endTime': r.endTime, 'days': r.days}for r in data)
     def POST(*args, **vars):
         uid = args[0]
         s = vars["dayStart"]
@@ -84,6 +84,8 @@ def api():
         for i in range (int(s), int(t)+1):
           duration.append(i)
         db.events.insert(username =uid, startTime = vars['timeStart'], endTime = vars['timeEnd'], days = duration)
+        #db.events.insert(username =uid, startTime = vars['s'], endTime = vars['timeEnd'], days = duration)
+
         return "success saving data!"
 
     def PUT(table_name,record_id,**vars):

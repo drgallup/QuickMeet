@@ -34,8 +34,11 @@ var can = document.getElementById('myCanvas'),
     context = can.getContext('2d'),
     element = [];
 
-var dayNum;
-var hourHeight;
+var btimeStart = [];
+var btimeEnd = [];
+var bdayStart = [];
+var bdayEnd = [];
+
 // ~~~~~~~~~~~~~~~~
 can.addEventListener('mousedown', mouseDown, false);
 can.addEventListener('mousemove', mouseMove, false);
@@ -75,8 +78,8 @@ function mouseUp(eve) {
     ctx.clearRect(0,0,c.width,c.height);
     drawGrid();
     findLocation();
-    drawBox(dayNum, hourHeight);
-    
+    drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
+    console.log(btimeStart, btimeEnd, bdayStart, bdayEnd);    
 }
 
 // Tracks user's initial click
@@ -148,12 +151,13 @@ function mouseMove(eve) {
     }else if(!tipDisplay){
       tipDisplay = 700;
     }
-    
+    drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
     // text
 		ctx.font = "14px Arial";
 		ctx.fillStyle = 'white';
 		ctx.fillText(tipDisplay,toolX[0]+5,toolY[1]-5);
-    
+
+ 
     
 }
 
@@ -225,9 +229,11 @@ function findLocation (){
 
 
   //return values to generate boxes
-  dayNum = dayTemp;
-  hourHeight = hourTemp;
-  return dayNum, hourHeight;
+  btimeStart.push(timeStart);
+  btimeEnd.push(timeEnd);
+  bdayStart.push(dayStart);
+  bdayEnd.push(dayEnd);
+  return btimeStart, btimeEnd, bdayStart, bdayEnd;
   
 
     // add call to database here!

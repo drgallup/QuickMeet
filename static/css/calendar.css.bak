@@ -38,5 +38,5 @@ canvas {
 
 li {
 vertical-align:top;
-  margin-left:10px;
+  margin-left:5px;
 }
