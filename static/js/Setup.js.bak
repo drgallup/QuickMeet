@@ -1,0 +1,73 @@
+//Setup the inital uuid
+var user = localStorage.getItem("uuid");
+//Flag is set true for new user
+var flag = true;
+console.log(user); 
+//get_data("/QuickMeet/default/api/username.json");
+
+function setup(){
+    //Fetch an random uuid and assign it to the user and give a random name for now
+    //Also update the local cache
+    //Inisert code to prompt the user for name
+    if (user === undefined || user === null || user === "") {
+        user = get_data("/QuickMeet/uuid/api/1.json");
+        console.log(user); 
+        localStorage.setItem("uuid", user); 
+        var redirection ="/QuickMeet/?username=";
+        window.location.href=redirection + user;
+        flag = true;
+    //The coordinate tracker's inital setup should draw boxes for the user
+    } else {
+      flag = false;
+    }
+
+
+}
+setup();
+
+if (flag == false) {
+    console.log(user);
+    var data = get_data("/QuickMeet/default/api/"+ user +".json");
+//alert(data)
+//create array to store the events, days is a [][] array
+    var btimeStart = []
+    var btimeEnd = []
+    var bdayStart = []
+    var bdayEnd = []
+
+//parse data
+    var jsonData = JSON.parse(data);
+    for (var i = 0; i < jsonData.length; i++) {
+
+        btimeStart.push(jsonData[i].startTime)
+        btimeEnd.push(jsonData[i].endTime)
+        bdayStart.push(jsonData[i].days[0])
+        bdayEnd.push(jsonData[i].days[jsonData[i].days.length -1])
+    //alert(startTime)
+    //alert(endTime)
+    //alert(startDay)
+    //alert(endDay)
+    }
+
+//draw the box of the user
+    drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
+}
+
+
+function post_data(URL, tStart, tEnd, dStart, dEnd){
+    var x = new XMLHttpRequest();
+    x.open('POST', URL, false);
+    x.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    x.send("timeStart=" + tStart + "&timeEnd=" + tEnd + "&dayStart=" + dStart + "&dayEnd=" + dEnd);
+    //alert(x.responseText);
+}
+
+function get_data(URL){
+    console.log(URL);
+    var x = new XMLHttpRequest();
+    x.open( "GET", URL, false ); // false for synchronous request
+    x.send( null );
+    alert(x.responseText);
+    return x.response;
+    //alert(x.responseText);
+}

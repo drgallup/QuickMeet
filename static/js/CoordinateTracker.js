@@ -32,17 +32,23 @@ var mouseIsDown = false;
 var can = document.getElementById('myCanvas'),
     canLeft = can.offsetLeft,
     canTop = can.offsetTop,
-    context = can.getContext('2d')
+    context = can.getContext('2d');
 
 //get the calendar owner's name
-var user = getParameterByName("username")
+if (getParameterByName("username") != null) {
+    user = getParameterByName("username");
+    console.log(user);
+}
+
 //create these 4 array to store calendar's events data
-var btimeStart = [];
-var btimeEnd = [];
-var bdayStart = [];
-var bdayEnd = [];
+//Already defined in setup
+//var btimeStart = [];
+//var btimeEnd = [];
+//var bdayStart = [];
+//var bdayEnd = [];
 //get the calendar owner's all events, and then draw the box
-get_Data("/QuickMeet/default/api/"+ user +".json",function(data){
+console.log(user);
+get_data("/QuickMeet/default/api/"+ user +".json",function(data){
     var jsonData = JSON.parse(data);
     for (var i = 0; i < jsonData.length; i++) {
         btimeStart.push(jsonData[i].startTime)
@@ -60,6 +66,10 @@ get_Data("/QuickMeet/default/api/"+ user +".json",function(data){
 can.addEventListener('mousedown', mouseDown, false);
 can.addEventListener('mousemove', mouseMove, false);
 can.addEventListener('mouseup', mouseUp, false);
+
+
+//Continue off from the setup script, load the user's data and draw
+
 
 // tooltip
 // http://stackoverflow.com/questions/15702867/html-tooltip-position-relative-to-mouse-pointer
@@ -92,6 +102,7 @@ function mouseUp(eve) {
         //endY = pos.y;
         //drawSquare(); 
     }
+    //console.log("Inside mouseup");
     ctx.clearRect(0,0,c.width,c.height);
     drawGrid();
     if(deletion==false){
@@ -101,8 +112,6 @@ function mouseUp(eve) {
       findDeletion();
     }
     drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
-     
-    
 }
 
 // Tracks user's initial click
@@ -122,7 +131,7 @@ var toolY;
 function mouseMove(eve) {
     ctx.clearRect(0,0,c.width,c.height);
     drawGrid();
-    // mouse position
+    // mouse position 
     drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
     var pos = getMousePos(canvas, eve);
 
@@ -148,19 +157,7 @@ function mouseMove(eve) {
         drawSquare();
     }
     
-    // tooltip
-    toolX = [pos.x - 50, pos.x - 10];
-    toolY = [pos.y, pos.y+20];
-    if(toolY[1] > 350){
-      toolY[0] -= 20;
-      toolY[1] -= 20;
-    }
-    
-    // box
-    ctx.beginPath();
-    ctx.fillStyle = "rgba(30,30,30,1)";
-    ctx.fillRect(toolX[0], toolY[0], toolX[1]-toolX[0], toolY[1]-toolY[0]);
-    ctx.lineWidth = 1;
+    // tooltip:
     
     // current time
     // figure out which hours were selected
@@ -178,10 +175,33 @@ function mouseMove(eve) {
       tipDisplay = 700;
     }
     
+    // change the size of the tooltip based on the length of the string
+    if(tipDisplay >= 1000){
+      toolX = [pos.x - 50, pos.x - 8];
+    }else if (tipDisplay < 1000){
+      toolX = [pos.x - 44, pos.x - 8];
+    }
+    toolY = [pos.y, pos.y+20];
+    if(toolY[1] > 350){
+      toolY[0] -= 20;
+      toolY[1] -= 20;
+    }
+    
+    // box
+    //ctx.fillStyle = "rgba(30,30,30,1)";
+    //roundRect(ctx, toolX[0], toolY[0], toolX[1]-toolX[0], toolY[1]-toolY[0], 2, true, false)
+    ctx.beginPath();
+    ctx.fillStyle = "rgba(30,30,30,1)";
+    ctx.fillRect(toolX[0], toolY[0], toolX[1]-toolX[0], toolY[1]-toolY[0]);
+    ctx.lineWidth = 1;
+    
+    // add the colon
+    tipDisplay = addColon(tipDisplay);
+    
     // text
-		ctx.font = "14px Arial";
+		ctx.font = "14px Palatino";
 		ctx.fillStyle = 'white';
-		ctx.fillText(tipDisplay,toolX[0]+5,toolY[1]-5);
+		ctx.fillText(tipDisplay,toolX[0]+4,toolY[1]-5);
     
     
 }
@@ -242,7 +262,11 @@ function findDeletion(){
 
   for (a = btimeStart.length-1; a>=0; a--) {
         if((btimeStart[a]<=timeStart) && (timeEnd<=btimeEnd[a]) && (bdayStart[a]<=dayStart) && (dayEnd<=bdayEnd[a])){
+
             //alert(a + " true");
+            post_data("/QuickMeet/default/api/" + user + "/1/" + ".json", btimeStart[a], btimeEnd[a], bdayStart[a], bdayEnd[a]);
+
+
             btimeStart.splice(a,1);
             btimeEnd.splice(a,1);
             bdayStart.splice(a,1);
@@ -292,11 +316,13 @@ function findLocation (){
   var dayEnd = dayTemp[dayTemp.length-1];
 
   
-  console.log("Busy from " + timeStart + " to " + timeEnd + " " + dayMap(dayStart) + " through " + dayMap(dayEnd));
+  //console.log("Busy from " + timeStart + " to " + timeEnd + " " + dayMap(dayStart) + " through " + dayMap(dayEnd));
   //post
-  var user = getParameterByName("username")  
-  post_data("/QuickMeet/default/api/"+ user +".json", timeStart, timeEnd, dayStart, dayEnd);
+  //console.log("Before posting"); 
+  //post_data("/QuickMeet/default/api/"+ user +".json", timeStart, timeEnd, dayStart, dayEnd);
+  post_data("/QuickMeet/default/api/"+ user + "/0" +".json", timeStart, timeEnd, dayStart, dayEnd);
 
+  console.log("Posted data");
   btimeStart.push(timeStart);
   btimeEnd.push(timeEnd);
   bdayStart.push(dayStart);
@@ -308,6 +334,31 @@ function findLocation (){
 // maps the hour selected to the time displayed
 function timeCalc(x){
   return (Math.floor(x/7)*100 + (x%7 < 6 ? x%7 : 10)*10 + 700);
+}
+
+// adds a colon on to a time, returns a string
+function addColon(x){
+  var temp = x.toString();
+  var tempArray = [];
+  // walk through each number and separate them into the array
+  for (var i = 0, len = temp.length; i < len; i ++) {
+    tempArray.push(+temp.charAt(i));
+  }
+  var output = '';
+  if(tempArray.length===3){
+    output += tempArray[0];
+    output += ':';
+    output += tempArray[1];
+    output += tempArray[2];
+  }else if(tempArray.length===4){
+    output += tempArray[0];
+    output += tempArray[1];
+    output += ':';
+    output += tempArray[2];
+    output += tempArray[3];
+  }
+  //console.log(output);
+  return output;
 }
 
 // maps the days to strings
@@ -332,43 +383,9 @@ function dayMap(x){
   }
 }
 
+
 //link the 'CREATE GROUP' button in the main page, redirect user to group calendar
 function group(){
-        var user = getParameterByName("username")
-        window.location.href = "http://127.0.0.1:8000/Quickmeet/default/group?"+"username="+user
+        window.location.href = "/QuickMeet/default/group?"+"username="+user
 }
 
-//http 'POST' method
-function post_data(URL, tStart, tEnd, dStart, dEnd){
-    var x = new XMLHttpRequest();
-    x.open('POST', URL, false);
-    x.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    x.send("timeStart=" + tStart + "&timeEnd=" + tEnd + "&dayStart=" + dStart + "&dayEnd=" + dEnd);
-    //alert(x.responseText);
-}
-
-//http 'GET' method
-function get_Data(theUrl, callback)
-{
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() { 
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-            callback(xmlHttp.responseText);
-    }
-    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
-    xmlHttp.send(null);
-}
-
-
-//function to get the calendar owner's name
-function getParameterByName(name, url) {
-    if (!url) {
-      url = window.location.href;
-    }
-    name = name.replace(/[\[\]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
-}

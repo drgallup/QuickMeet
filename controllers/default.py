@@ -78,18 +78,22 @@ def api():
         #return json.dumps({'username': r.username, 'startTime': r.startTime, 'endTime': r.endTime, 'days': r.days}for r in data)
     def POST(*args, **vars):
         uid = args[0]
+        dFlag = args[1]
         s = vars["dayStart"]
         t = vars["dayEnd"]
         duration = []
         for i in range (int(s), int(t)+1):
           duration.append(i)
-        db.events.insert(username =uid, startTime = vars['timeStart'], endTime = vars['timeEnd'], days = duration)
-        #db.events.insert(username =uid, startTime = vars['s'], endTime = vars['timeEnd'], days = duration)
+        if dFlag == "1":
+            db(db.events.startTime==vars['timeStart']).delete()
+        if dFlag == "0":
+            db.events.insert(username =uid, startTime = vars['timeStart'], endTime = vars['timeEnd'], days = duration)
+            
 
-        return "success saving data!"
+        return dFlag,uid
 
     def PUT(table_name,record_id,**vars):
         return db(db[table_name]._id==record_id).update(**vars)
     def DELETE(table_name,record_id):
-        return db(db[table_name]._id==record_id).delete()
+        return db(db[events].events.id==record_id).delete()
     return dict(GET=GET, POST=POST, PUT=PUT, DELETE=DELETE)
