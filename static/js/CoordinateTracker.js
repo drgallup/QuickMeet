@@ -350,6 +350,6 @@ function dayMap(x){
 
 //link the 'CREATE GROUP' button in the main page, redirect user to group calendar
 function group(){
-        window.location.href = "QuickMeet/default/group?"+"username="+user
+        window.location.href = "/QuickMeet/default/group?"+"username="+user
 }
 
