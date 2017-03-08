@@ -242,7 +242,7 @@ function findDeletion(){
 
   for (a = btimeStart.length-1; a>=0; a--) {
         if((btimeStart[a]<=timeStart) && (timeEnd<=btimeEnd[a]) && (bdayStart[a]<=dayStart) && (dayEnd<=bdayEnd[a])){
-            alert(a + " true");
+            //alert(a + " true");
             btimeStart.splice(a,1);
             btimeEnd.splice(a,1);
             bdayStart.splice(a,1);
