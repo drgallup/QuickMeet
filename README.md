@@ -19,6 +19,15 @@ Dylan, 4pm 2/3/17, Ver. 0.6 - CoordinateTracker.js - detects and alerts day and 
 
 Fei & Kevin, 8am 2/8/17, ver. 0.7 CoordinateTracker.js -Update the database via RESTful API and setup database in db.py
 
+Fei 5pm,  3/1/17 load the data from database 
+        files change: Controller: 'default.py'
+	View: 'default/index.html', 'default/group.html'
+	Static/js: 'BoxGenerator.js', 'CoordinateTracker.js', 'GroupCalendar.js'
+			
 Nathan 4pm 2/20/17. ver. 0.8 CoordinateTracker.js -Fixed dragging issues for box
 
 Dylan 6pm 2/22/17. ver 1.1 CoordinateTracker.js - split sections into 7ths for 10 minute intervals and added tooltips
+
+Dylan 2pm 3/3/17. ver 1.2 Undo.js - added undo functionality through ctrl+z to delete events. Will not update with the SQL
+
+Kevin, 3/6/17. ver 1.3 Setup.js -Setup all the necessary parameter and cache locally. Dynamically load user profile depend on URL/cache
