@@ -50,7 +50,7 @@ function drawGrid(){
 	for (var y = 0; y-1<=height; y+=tileHeight){
 		ctx.moveTo(100,y);
 		ctx.lineTo(width+100,y);
-		ctx.font = "14px Palatino";
+		ctx.font = "14px Arial";
 		ctx.fillStyle = 'black';
 		ctx.fillText(findTime(y),0,y+tileHeight);
 	}
