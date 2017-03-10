@@ -14,7 +14,11 @@ function drawBox(tStart, tEnd, dStart, dEnd, hourTemp){
         //width is change in days times the width of the tile
         Width = ((dEnd[a]-dStart[a])*tileWidth)+tileWidth;
        // console.log("hourTemp" is hourTemp);
-        Length = (hourTemp[a].length-1)/7*tileHeight;
+        if (hourTemp[a] != null){
+            Length = (hourTemp[a].length-1)/7*tileHeight;
+        }else{
+            Length = 0;
+        }
 
         //calculate Y coordinate dynamically
         if (tStart[a]%100 == 0){
