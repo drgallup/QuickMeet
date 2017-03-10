@@ -1,27 +1,46 @@
 //Setup the inital uuid
 //Fetch from the URL first and then use local storage if necessary
-
-
 var user = getParameterByName("username")
+//If the user did not specific a user name in the URL, look in cache
 if (user == "" || user == null || user == undefined) {
   user =localStorage.getItem("uuid");
 }
+
 //Flag is set true for new user
 var flag = true;
-console.log(user); 
-//get_data("/QuickMeet/default/api/username.json");
+
+//Check if it is the correct user
+if (user != null) {
+    var rightUser = confirm("Are you " + user + " or another existing new user");
+    if (rightUser == true) {
+     console.log("Right user");
+     flag = false;
+    } else {
+        user = prompt("Please enter your username");
+        localStorage.setItem("uuid", user);
+        var redirection ="/QuickMeet/?username=";
+        window.location.href=redirection + user;
+        flag = false;
+    }
+} else {
+//user is not defined
+}
 
 function setup(){
     //Fetch an random uuid and assign it to the user and give a random name for now
     //Also update the local cache
-    //Inisert code to prompt the user for name
-    if (user === undefined || user === null || user === "") {
+    //Prompt for first name and send post request to the end point
+    if (flag == true) {
         user = get_data("/QuickMeet/uuid/api/1.json");
-        console.log(user); 
+        console.log(user);
         localStorage.setItem("uuid", user); 
+        var firstName = prompt("Please enter your name");
+        //post request to update the uuid's name
+        post_user("/QuickMeet/default/api/2.json", user);
+
         var redirection ="/QuickMeet/?username=";
         window.location.href=redirection + user;
-        flag = true;
+        flag = false;
     //The coordinate tracker's inital setup should draw boxes for the user
     } else {
       flag = false;
@@ -59,6 +78,15 @@ if (flag == false) {
     drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
 }
 
+
+function post_user (URL, user){
+    var x = new XMLHttpRequest();
+    x.open("POST", URL,false);
+    x.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    x.send("userName=" + user);
+    console.log("request sent");
+    console.log("Response" + x.response);
+}
 
 function post_data(URL, tStart, tEnd, dStart, dEnd){
     var x = new XMLHttpRequest();
