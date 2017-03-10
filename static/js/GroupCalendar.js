@@ -33,6 +33,7 @@ var interval = "0"
 //the function to add member to group calendar
 function add() {
           ctx.clearRect(0,0,c.width,c.height);
+          emptyTable();
           drawGrid();
           drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
           var newUser = $('#member').val();
@@ -69,6 +70,8 @@ function add() {
 
 //set time intervel
 function setTime() {
+          emptyTable();
+          reloadTable()
           interval = $('#interval').val();
           console.log('time interval is ', interval);
             var memberString = ""
@@ -90,6 +93,14 @@ function setTime() {
             ctx.clearRect(0,0,c.width,c.height);
             drawGrid();
             drawBox(newTimeStart, newTimeEnd, newdayStart, newdayEnd);
+              
+            for(var i = 0; i < newTimeStart.length - 1; i++){
+                var str = $('#result').html();
+                if(newdayStart[i] == newdayStart[i+1]){
+                    str = str + "<tr>" + "<td>" + dayMap(newdayStart[i]) + "</td>" + "<td>" + parseInt(newTimeEnd[i]/100) + ":" + changeTwoDecimal_f(newTimeEnd[i]%100) + "</td>" + "<td>" + parseInt(newTimeStart[i+1]/100) + ":" + changeTwoDecimal_f(newTimeStart[i+1]%100) + "</td>"  + "</tr>";
+                }
+                $('#result').html(str);
+            }
 
           })
       }
@@ -100,6 +111,7 @@ function refresh(){
         
         //drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
         ctx.clearRect(0,0,c.width,c.height);
+        emptyTable();
         drawGrid();
         drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
     
@@ -152,6 +164,48 @@ function refresh(){
 */
 }
 
+function changeTwoDecimal_f(x) {
+    if(x == '0'){
+        return "00";
+    }else{
+    return x;
+    }
+}
+
+
+//daymapping
+function dayMap(x){
+  switch(x){
+    case 0:
+      return "Sunday";
+    case 1:
+      return "Monday";
+    case 2:
+      return "Tuesday";
+    case 3:
+      return "Wednesday";
+    case 4:
+      return "Thursday";
+    case 5:
+      return "Friday";
+    case 6:
+      return "Saturday";
+    default:
+      return "Error: Invalid Day";
+  }
+}
+
+//empty table
+function emptyTable(){
+    $('#head').empty();
+    $('#result').empty();
+}
+//reload table
+function reloadTable(){
+    $('#head').html("Possible Time")
+    $('#result').html("<tr><th>day</th><th>startTime</th><th>endTime</th></tr>");
+
+}
 
 //delete the group member
 function deleteMember(ele){
