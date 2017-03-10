@@ -42,13 +42,14 @@ if (getParameterByName("username") != null) {
 
 //create these 4 array to store calendar's events data
 //Already defined in setup
-//var btimeStart = [];
-//var btimeEnd = [];
-//var bdayStart = [];
-//var bdayEnd = [];
-//get the calendar owner's all events, and then draw the box
+var btimeStart = [];
+var btimeEnd = [];
+var bdayStart = [];
+var bdayEnd = [];
 var bhourTemp = [];
 var f = 0;
+
+//get the calendar owner's all events, and then draw the box
 console.log(user);
 get_data("/QuickMeet/default/api/"+ user +".json",function(data){
     var jsonData = JSON.parse(data);
@@ -392,4 +393,3 @@ function dayMap(x){
 function group(){
         window.location.href = "/QuickMeet/default/group?"+"username="+user
 }
-
