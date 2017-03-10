@@ -26,7 +26,7 @@ function drawBox(tStart, tEnd, dStart, dEnd, hourTemp){
             Y_coordinate = (tStart[a]%100)/60*tileHeight+yhours; //y coordinate is the fraction of the not whole tile plus any tiles before it
         }
 
-        console.log("Y_coodinate: " + Y_coordinate + " Length: " + Length);
+        //console.log("Y_coodinate: " + Y_coordinate + " Length: " + Length);
         ctx.fillStyle = "rgba(128,0,0,0.5)";
         ctx.fillRect(X_coordinate, Y_coordinate, Width, Length);
     }
