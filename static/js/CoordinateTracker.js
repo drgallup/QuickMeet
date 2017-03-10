@@ -47,6 +47,8 @@ if (getParameterByName("username") != null) {
 //var bdayStart = [];
 //var bdayEnd = [];
 //get the calendar owner's all events, and then draw the box
+var bhourTemp = [];
+var f = 0;
 console.log(user);
 get_data("/QuickMeet/default/api/"+ user +".json",function(data){
     var jsonData = JSON.parse(data);
@@ -56,7 +58,7 @@ get_data("/QuickMeet/default/api/"+ user +".json",function(data){
         bdayStart.push(jsonData[i].days[0])
         bdayEnd.push(jsonData[i].days[jsonData[i].days.length -1])
     }
-    drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
+    drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd, bhourTemp);
 })
 
 
@@ -111,7 +113,7 @@ function mouseUp(eve) {
     if(deletion==true){
       findDeletion();
     }
-    drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
+    drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd, bhourTemp);
 }
 
 // Tracks user's initial click
@@ -132,7 +134,7 @@ function mouseMove(eve) {
     ctx.clearRect(0,0,c.width,c.height);
     drawGrid();
     // mouse position 
-    drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
+    drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd, bhourTemp);
     var pos = getMousePos(canvas, eve);
 
     // do drag box
@@ -142,14 +144,14 @@ function mouseMove(eve) {
         if(endX>maxX || endY>maxY){
         	ctx.clearRect(0,0,c.width,c.height);
     		drawGrid(); 
-            drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
+            drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd, bhourTemp);
         	maxX=endX;
         	maxY=endY;
         }
         if(endX<maxX || endY<maxY){
    	 	ctx.clearRect(0,0,c.width,c.height);
     	drawGrid();
-            drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
+            drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd, bhourTemp);
         	maxX = endX;
         	maxY = endY;
 
@@ -274,7 +276,7 @@ function findDeletion(){
             counter = counter + 1;
             ctx.clearRect(0,0,c.width,c.height);
             drawGrid();
-            drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd); 
+            drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd, bhourTemp); 
             console.log("Deleted");
             break;
         } 
@@ -323,6 +325,8 @@ function findLocation (){
   post_data("/QuickMeet/default/api/"+ user + "/0" +".json", timeStart, timeEnd, dayStart, dayEnd);
 
   console.log("Posted data");
+  bhourTemp[f] = hourTemp;
+  f++;
   btimeStart.push(timeStart);
   btimeEnd.push(timeEnd);
   bdayStart.push(dayStart);
