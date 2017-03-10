@@ -112,7 +112,7 @@ function removeByValue(arr, val) {
 //return the calendar owner's edit page
 function returnEdit(){
         var user = getParameterByName("username")
-        window.location.href = "/QuickMeet/default/index?"+"username="+user
+        window.location.href = "/Quickmeet/default/index?"+"username="+user
 }
 
 
