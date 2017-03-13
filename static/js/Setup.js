@@ -32,31 +32,24 @@ function setup(){
 setup();
 
 if (flag == false) {
-    console.log(user);
-    var data = get_data("/QuickMeet/default/api/"+ user +".json");
-//alert(data)
-//create array to store the events, days is a [][] array
+    //console.log(user);
+    //alert(data)
+    //create array to store the events, days is a [][] array
     var btimeStart = []
     var btimeEnd = []
     var bdayStart = []
     var bdayEnd = []
 
-//parse data
+    get_Data("/QuickMeet/default/api/" + "0/"+ user +".json",function(data){
     var jsonData = JSON.parse(data);
     for (var i = 0; i < jsonData.length; i++) {
-
         btimeStart.push(jsonData[i].startTime)
         btimeEnd.push(jsonData[i].endTime)
         bdayStart.push(jsonData[i].days[0])
         bdayEnd.push(jsonData[i].days[jsonData[i].days.length -1])
-    //alert(startTime)
-    //alert(endTime)
-    //alert(startDay)
-    //alert(endDay)
     }
-
-//draw the box of the user
     drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
+})
 }
 
 
@@ -67,6 +60,20 @@ function post_data(URL, tStart, tEnd, dStart, dEnd){
     x.send("timeStart=" + tStart + "&timeEnd=" + tEnd + "&dayStart=" + dStart + "&dayEnd=" + dEnd);
     //alert(x.responseText);
 }
+
+
+//this is the new get_Data function
+function get_Data(theUrl, callback)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() { 
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            callback(xmlHttp.responseText);
+    }
+    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+    xmlHttp.send(null);
+}
+
 
 function get_data(URL){
     console.log(URL);

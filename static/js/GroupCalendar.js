@@ -203,7 +203,7 @@ function emptyTable(){
 //reload table
 function reloadTable(){
     $('#head').html("Possible Time")
-    $('#result').html("<tr><th>day</th><th>startTime</th><th>endTime</th></tr>");
+    $('#result').html("<tr><th>Day</th><th>From</th><th>To</th></tr>");
 
 }
 
