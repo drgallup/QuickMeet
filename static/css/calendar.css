@@ -41,8 +41,12 @@ vertical-align:top;
   margin-left:10px;
 }
 
+th{
+    font-size:20px;
+    font-family:"Trebuchet MS", Helvetica, sans-serif;
+    text-align: center;
+}
 #result{
-       border:1px solid #F00；
     text-align: center;
     margin-left: auto;
     margin-right: auto;
