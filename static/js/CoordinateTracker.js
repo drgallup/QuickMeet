@@ -157,19 +157,7 @@ function mouseMove(eve) {
         drawSquare();
     }
     
-    // tooltip
-    toolX = [pos.x - 50, pos.x - 10];
-    toolY = [pos.y, pos.y+20];
-    if(toolY[1] > 350){
-      toolY[0] -= 20;
-      toolY[1] -= 20;
-    }
-    
-    // box
-    ctx.beginPath();
-    ctx.fillStyle = "rgba(30,30,30,1)";
-    ctx.fillRect(toolX[0], toolY[0], toolX[1]-toolX[0], toolY[1]-toolY[0]);
-    ctx.lineWidth = 1;
+    // tooltip:
     
     // current time
     // figure out which hours were selected
@@ -187,10 +175,33 @@ function mouseMove(eve) {
       tipDisplay = 700;
     }
     
+    // change the size of the tooltip based on the length of the string
+    if(tipDisplay >= 1000){
+      toolX = [pos.x - 50, pos.x - 8];
+    }else if (tipDisplay < 1000){
+      toolX = [pos.x - 44, pos.x - 8];
+    }
+    toolY = [pos.y, pos.y+20];
+    if(toolY[1] > 350){
+      toolY[0] -= 20;
+      toolY[1] -= 20;
+    }
+    
+    // box
+    //ctx.fillStyle = "rgba(30,30,30,1)";
+    //roundRect(ctx, toolX[0], toolY[0], toolX[1]-toolX[0], toolY[1]-toolY[0], 2, true, false)
+    ctx.beginPath();
+    ctx.fillStyle = "rgba(30,30,30,1)";
+    ctx.fillRect(toolX[0], toolY[0], toolX[1]-toolX[0], toolY[1]-toolY[0]);
+    ctx.lineWidth = 1;
+    
+    // add the colon
+    tipDisplay = addColon(tipDisplay);
+    
     // text
-		ctx.font = "14px Arial";
+		ctx.font = "14px Palatino";
 		ctx.fillStyle = 'white';
-		ctx.fillText(tipDisplay,toolX[0]+5,toolY[1]-5);
+		ctx.fillText(tipDisplay,toolX[0]+4,toolY[1]-5);
     
     
 }
@@ -323,6 +334,31 @@ function findLocation (){
 // maps the hour selected to the time displayed
 function timeCalc(x){
   return (Math.floor(x/7)*100 + (x%7 < 6 ? x%7 : 10)*10 + 700);
+}
+
+// adds a colon on to a time, returns a string
+function addColon(x){
+  var temp = x.toString();
+  var tempArray = [];
+  // walk through each number and separate them into the array
+  for (var i = 0, len = temp.length; i < len; i ++) {
+    tempArray.push(+temp.charAt(i));
+  }
+  var output = '';
+  if(tempArray.length===3){
+    output += tempArray[0];
+    output += ':';
+    output += tempArray[1];
+    output += tempArray[2];
+  }else if(tempArray.length===4){
+    output += tempArray[0];
+    output += tempArray[1];
+    output += ':';
+    output += tempArray[2];
+    output += tempArray[3];
+  }
+  //console.log(output);
+  return output;
 }
 
 // maps the days to strings
