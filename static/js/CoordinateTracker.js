@@ -97,12 +97,7 @@ function mouseUp(eve) {
 	var deletion = document.getElementById('deleteswitch').checked;
     if (mouseIsDown != false) {
         mouseIsDown = false;
-        //var pos = getMousePos(canvas, eve);
-        //endX = pos.x;
-        //endY = pos.y;
-        //drawSquare(); 
     }
-    //console.log("Inside mouseup");
     ctx.clearRect(0,0,c.width,c.height);
     drawGrid();
     if(deletion==false){
@@ -116,7 +111,6 @@ function mouseUp(eve) {
 
 // Tracks user's initial click
 function mouseDown(eve) {
-    
     mouseIsDown = true;
     var pos = getMousePos(canvas, eve);
     startX = endX = pos.x;
@@ -141,7 +135,7 @@ function mouseMove(eve) {
         endY = pos.y;
         if(endX>maxX || endY>maxY){
         	ctx.clearRect(0,0,c.width,c.height);
-    		drawGrid(); 
+    		drawGrid();
             drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
         	maxX=endX;
         	maxY=endY;
@@ -388,4 +382,3 @@ function dayMap(x){
 function group(){
         window.location.href = "/QuickMeet/default/group?"+"username="+user
 }
-
