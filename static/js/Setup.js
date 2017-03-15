@@ -38,7 +38,7 @@ function setup(){
         //post request to update the uuid's name
         post_user("/QuickMeet/default/api/"+ user + "/2" +".json",firstName);
         var redirection ="/QuickMeet/?username=";
-       //window.location.href=redirection + user;
+        window.location.href=redirection + user;
         flag = false;
     //The coordinate tracker's inital setup should draw boxes for the user
     } else {
@@ -67,10 +67,6 @@ if (flag == false) {
         btimeEnd.push(jsonData[i].endTime)
         bdayStart.push(jsonData[i].days[0])
         bdayEnd.push(jsonData[i].days[jsonData[i].days.length -1])
-    //alert(startTime)
-    //alert(endTime)
-    //alert(startDay)
-    //alert(endDay)
     }
 
 //draw the box of the user
@@ -83,8 +79,6 @@ function post_user (URL, user){
     x.open("POST", URL,false);
     x.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     x.send("firstName=" + user);
-    console.log("request sent");
-    console.log("Response" + x.response);
 }
 
 function post_data(URL, tStart, tEnd, dStart, dEnd){
