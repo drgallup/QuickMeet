@@ -36,10 +36,9 @@ function setup(){
         localStorage.setItem("uuid", user); 
         var firstName = prompt("Please enter your name");
         //post request to update the uuid's name
-        post_user("/QuickMeet/default/api/2.json", user);
-
+        post_user("/QuickMeet/default/api/"+ user + "/2" +".json",firstName);
         var redirection ="/QuickMeet/?username=";
-        window.location.href=redirection + user;
+       //window.location.href=redirection + user;
         flag = false;
     //The coordinate tracker's inital setup should draw boxes for the user
     } else {
@@ -83,7 +82,7 @@ function post_user (URL, user){
     var x = new XMLHttpRequest();
     x.open("POST", URL,false);
     x.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    x.send("userName=" + user);
+    x.send("firstName=" + user);
     console.log("request sent");
     console.log("Response" + x.response);
 }

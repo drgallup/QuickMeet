@@ -316,13 +316,10 @@ function findLocation (){
   var dayEnd = dayTemp[dayTemp.length-1];
 
   
-  //console.log("Busy from " + timeStart + " to " + timeEnd + " " + dayMap(dayStart) + " through " + dayMap(dayEnd));
   //post
-  //console.log("Before posting"); 
   //post_data("/QuickMeet/default/api/"+ user +".json", timeStart, timeEnd, dayStart, dayEnd);
   post_data("/QuickMeet/default/api/"+ user + "/0" +".json", timeStart, timeEnd, dayStart, dayEnd);
 
-  console.log("Posted data");
   btimeStart.push(timeStart);
   btimeEnd.push(timeEnd);
   bdayStart.push(dayStart);

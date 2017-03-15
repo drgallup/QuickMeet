@@ -79,21 +79,18 @@ def api():
     def POST(*args, **vars):
         uid = args[0]
         dFlag = args[1]
-        length = len(args)
-        if(length > 1):
-            firstName = args[2]
+        if dFlag == "2":
+            db.users.insert(username=uid, firstName=vars['firstName'])
+            return
         s = vars["dayStart"]
         t = vars["dayEnd"]
-        duration = []
+        duration = []        
         for i in range (int(s), int(t)+1):
           duration.append(i)
         if dFlag == "1":
             db(db.events.startTime==vars['timeStart']).delete()
         if dFlag == "0":
             db.events.insert(username=uid, startTime = vars['timeStart'], endTime = vars['timeEnd'], days = duration)
-        if dFlag == "2":
-            db.users.insert(username=uid, firstName=firstName)
-
         return dFlag,uid
 
     def PUT(table_name,record_id,**vars):
