@@ -48,7 +48,7 @@ if (getParameterByName("username") != null) {
 //var bdayEnd = [];
 //get the calendar owner's all events, and then draw the box
 console.log(user);
-get_data("/QuickMeet/default/api/"+ user +".json",function(data){
+get_Data("/QuickMeet/default/api/0/"+ user +".json",function(data){
     var jsonData = JSON.parse(data);
     for (var i = 0; i < jsonData.length; i++) {
         btimeStart.push(jsonData[i].startTime)
@@ -97,12 +97,7 @@ function mouseUp(eve) {
 	var deletion = document.getElementById('deleteswitch').checked;
     if (mouseIsDown != false) {
         mouseIsDown = false;
-        //var pos = getMousePos(canvas, eve);
-        //endX = pos.x;
-        //endY = pos.y;
-        //drawSquare(); 
     }
-    //console.log("Inside mouseup");
     ctx.clearRect(0,0,c.width,c.height);
     drawGrid();
     if(deletion==false){
@@ -116,7 +111,6 @@ function mouseUp(eve) {
 
 // Tracks user's initial click
 function mouseDown(eve) {
-    
     mouseIsDown = true;
     var pos = getMousePos(canvas, eve);
     startX = endX = pos.x;
@@ -141,7 +135,7 @@ function mouseMove(eve) {
         endY = pos.y;
         if(endX>maxX || endY>maxY){
         	ctx.clearRect(0,0,c.width,c.height);
-    		drawGrid(); 
+    		drawGrid();
             drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
         	maxX=endX;
         	maxY=endY;
@@ -385,4 +379,3 @@ function dayMap(x){
 function group(){
         window.location.href = "/QuickMeet/default/group?"+"username="+user
 }
-
