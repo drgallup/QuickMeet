@@ -1,37 +1,60 @@
 //Setup the inital uuid
 //Fetch from the URL first and then use local storage if necessary
-
-
-var user = getParameterByName("username")
+var user = getParameterByName("username");
+//If the user did not specific a user name in the URL, look in cache
 if (user == "" || user == null || user == undefined) {
   user =localStorage.getItem("uuid");
 }
+
+
 //Flag is set true for new user
-var flag = true;
-console.log(user); 
-//get_data("/QuickMeet/default/api/username.json");
+var isNew = true;
+var temp = localStorage.getItem("isNew");
+if (temp != null) {
+    isNew = false;
+}
+
+//Check if it is the correct user
+if (user != null && temp != null) {
+    var rightUser = confirm("Are you " + getFirst(user) + " or another existing new user");
+    if (rightUser == true) {
+     console.log("Right user");
+     isNew = false;
+    } else {
+        user = prompt("Please enter your username");
+        localStorage.setItem("uuid", user);
+        var redirection ="/QuickMeet/?username=";
+        window.location.href=redirection + user;
+        isNew = false;
+    }
+} else {
+//user is not defined
+    setup();
+}
 
 function setup(){
     //Fetch an random uuid and assign it to the user and give a random name for now
     //Also update the local cache
-    //Inisert code to prompt the user for name
-    if (user === undefined || user === null || user === "") {
+    //Prompt for first name and send post request to the end point
+    if (isNew == true) {
         user = get_data("/QuickMeet/uuid/api/1.json");
-        console.log(user); 
-        localStorage.setItem("uuid", user); 
+        console.log(user);
+        localStorage.setItem("uuid", user);
+        localStorage.setItem("isNew", 0); 
+        var firstName = prompt("Please enter your name");
+        //post request to update the uuid's name
+        post_user("/QuickMeet/default/api/"+ user + "/2" +".json",firstName);
         var redirection ="/QuickMeet/?username=";
         window.location.href=redirection + user;
-        flag = true;
+        isNew = false;
     //The coordinate tracker's inital setup should draw boxes for the user
     } else {
-      flag = false;
+      isNew = false;
     }
 
-
 }
-setup();
 
-if (flag == false) {
+if (isNew == false) {
     //console.log(user);
     //alert(data)
     //create array to store the events, days is a [][] array
@@ -52,6 +75,13 @@ if (flag == false) {
 })
 }
 
+
+function post_user (URL, user){
+    var x = new XMLHttpRequest();
+    x.open("POST", URL,false);
+    x.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    x.send("firstName=" + user);
+}
 
 function post_data(URL, tStart, tEnd, dStart, dEnd){
     var x = new XMLHttpRequest();
@@ -74,16 +104,13 @@ function get_Data(theUrl, callback)
     xmlHttp.send(null);
 }
 
-
 function get_data(URL){
     console.log(URL);
     var x = new XMLHttpRequest();
     x.open( "GET", URL, false ); // false for synchronous request
     x.send( null );
-    //alert(x.responseText);
     return x.response;
 }
-
 
 //function to get the calendar owner's name
 function getParameterByName(name, url) {
@@ -96,4 +123,11 @@ function getParameterByName(name, url) {
     if (!results) return null;
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+
+function getFirst (user){
+    var name = get_data("/QuickMeet/user/api/"+user+ ".json");
+    console.log("DOES IT PRINT" + name);
+    return name;
 }

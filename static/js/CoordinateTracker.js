@@ -48,7 +48,7 @@ if (getParameterByName("username") != null) {
 //var bdayEnd = [];
 //get the calendar owner's all events, and then draw the box
 console.log(user);
-get_data("/QuickMeet/default/api/"+ user +".json",function(data){
+get_Data("/QuickMeet/default/api/0/"+ user +".json",function(data){
     var jsonData = JSON.parse(data);
     for (var i = 0; i < jsonData.length; i++) {
         btimeStart.push(jsonData[i].startTime)
@@ -310,13 +310,10 @@ function findLocation (){
   var dayEnd = dayTemp[dayTemp.length-1];
 
   
-  //console.log("Busy from " + timeStart + " to " + timeEnd + " " + dayMap(dayStart) + " through " + dayMap(dayEnd));
   //post
-  //console.log("Before posting"); 
   //post_data("/QuickMeet/default/api/"+ user +".json", timeStart, timeEnd, dayStart, dayEnd);
   post_data("/QuickMeet/default/api/"+ user + "/0" +".json", timeStart, timeEnd, dayStart, dayEnd);
 
-  console.log("Posted data");
   btimeStart.push(timeStart);
   btimeEnd.push(timeEnd);
   bdayStart.push(dayStart);
