@@ -137,7 +137,8 @@ db.define_table('events',
 
 #URL will be use as the primary key to restrict insertion
 db.define_table('users', 
-                Field('url', 'text'),
+                Field('username', 'text'),
+                Field('firstName', 'text'),
                 Field('events', 'list:integer')
                 )
 

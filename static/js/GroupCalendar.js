@@ -20,11 +20,12 @@ get_Data("/QuickMeet/default/api/"+"0/"+ user, function(data){
 } )
 
 //generate the First name of Member which is calendar owner
-$('#list').html('<li>' + user + '</li>');
+$('#list').html('<li>' + getFirst(user) + '</li>');
 
 //store all the user in this array
 var groupMember = []
 var interval = "0"
+
 
 var colors = ["rgba(0,114,229,0.5)","rgba(0,255,0,0.5)",
               "rgba(255,255,0,0.5)","rgba(255,0,255,0.5)","rgba(255,102,0,0.5)",
@@ -32,6 +33,14 @@ var colors = ["rgba(0,114,229,0.5)","rgba(0,255,0,0.5)",
 var colorsBoolean = [false, false, false, false, false, false, false];
 var colorUser = ["test","test","test","test","test","test","test"];
 
+
+
+function getFirst (user){
+    console.log(user)
+    var name = get_data("/QuickMeet/user/api/"+user+ ".json");
+    console.log(name.slice(1,-1));
+    return name.slice(1,-1);
+}
 
 
 
@@ -292,4 +301,16 @@ function get_Data(theUrl, callback)
     xmlHttp.open("GET", theUrl, true); // true for asynchronous 
     xmlHttp.send(null);
     //alert(xmlHttp.responseText)
+
 }
+
+
+
+function get_data(URL){
+    console.log(URL);
+    var x = new XMLHttpRequest();
+    x.open( "GET", URL, false ); // false for synchronous request
+    x.send( null );
+    return x.response;
+}
+
