@@ -18,7 +18,6 @@ if (temp != null) {
 if (user != null && temp != null) {
     var rightUser = confirm("Are you " + getFirst(user) + " or another existing new user");
     if (rightUser == true) {
-     console.log("Right user");
      isNew = false;
     } else {
         user = prompt("Please enter your username");
@@ -105,7 +104,6 @@ function get_Data(theUrl, callback)
 }
 
 function get_data(URL){
-    console.log(URL);
     var x = new XMLHttpRequest();
     x.open( "GET", URL, false ); // false for synchronous request
     x.send( null );
@@ -128,6 +126,5 @@ function getParameterByName(name, url) {
 
 function getFirst (user){
     var name = get_data("/QuickMeet/user/api/"+user+ ".json");
-    console.log("DOES IT PRINT" + name);
     return name;
 }

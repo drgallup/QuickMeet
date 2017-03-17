@@ -37,7 +37,6 @@ var can = document.getElementById('myCanvas'),
 //get the calendar owner's name
 if (getParameterByName("username") != null) {
     user = getParameterByName("username");
-    console.log(user);
 }
 
 //create these 4 array to store calendar's events data
@@ -47,7 +46,6 @@ if (getParameterByName("username") != null) {
 //var bdayStart = [];
 //var bdayEnd = [];
 //get the calendar owner's all events, and then draw the box
-console.log(user);
 get_Data("/QuickMeet/default/api/0/"+ user +".json",function(data){
     var jsonData = JSON.parse(data);
     for (var i = 0; i < jsonData.length; i++) {
@@ -269,7 +267,6 @@ function findDeletion(){
             ctx.clearRect(0,0,c.width,c.height);
             drawGrid();
             drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd); 
-            console.log("Deleted");
             break;
         } 
     }
@@ -348,7 +345,6 @@ function addColon(x){
     output += tempArray[2];
     output += tempArray[3];
   }
-  //console.log(output);
   return output;
 }
 
