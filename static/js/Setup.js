@@ -7,7 +7,8 @@ if (user == "" || user == null || user == undefined) {
 }
 
 
-//Flag is set true for new user
+
+
 var isNew = true;
 var temp = localStorage.getItem("isNew");
 if (temp != null) {
@@ -31,6 +32,7 @@ if (user != null && temp != null) {
     setup();
 }
 
+
 function setup(){
     //Fetch an random uuid and assign it to the user and give a random name for now
     //Also update the local cache
@@ -53,25 +55,36 @@ function setup(){
 
 }
 
+
 if (isNew == false) {
-    //console.log(user);
-    //alert(data)
-    //create array to store the events, days is a [][] array
+
     var btimeStart = []
     var btimeEnd = []
     var bdayStart = []
     var bdayEnd = []
 
+//parse data
     get_Data("/QuickMeet/default/api/" + "0/"+ user +".json",function(data){
-    var jsonData = JSON.parse(data);
-    for (var i = 0; i < jsonData.length; i++) {
-        btimeStart.push(jsonData[i].startTime)
-        btimeEnd.push(jsonData[i].endTime)
-        bdayStart.push(jsonData[i].days[0])
-        bdayEnd.push(jsonData[i].days[jsonData[i].days.length -1])
+        var jsonData = JSON.parse(data);
+        for (var i = 0; i < jsonData.length; i++) {
+            btimeStart.push(jsonData[i].startTime)
+            btimeEnd.push(jsonData[i].endTime)
+            bdayStart.push(jsonData[i].days[0])
+            bdayEnd.push(jsonData[i].days[jsonData[i].days.length -1])
     }
-    drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
-})
+
+    drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd, null);
+})}
+
+
+function get_Data(theUrl, callback){     
+    var xmlHttp = new XMLHttpRequest();      
+    xmlHttp.onreadystatechange = function() {       
+    if (xmlHttp.readyState == 4 && xmlHttp.status == 200)      
+        callback(xmlHttp.responseText);       
+    }     
+    xmlHttp.open("GET", theUrl, true); // true for asynchronous        
+    xmlHttp.send(null);       
 }
 
 
@@ -102,6 +115,7 @@ function get_Data(theUrl, callback)
     xmlHttp.open("GET", theUrl, true); // true for asynchronous 
     xmlHttp.send(null);
 }
+
 
 function get_data(URL){
     var x = new XMLHttpRequest();
