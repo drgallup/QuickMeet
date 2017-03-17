@@ -31,7 +31,7 @@ document.onkeydown = function(evt) {
         // redraw the calendar
         ctx.clearRect(0,0,c.width,c.height);
         drawGrid();
-        drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
+        drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd, null);
       }
       break;
   }

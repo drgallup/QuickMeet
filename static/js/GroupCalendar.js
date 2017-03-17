@@ -16,7 +16,7 @@ get_Data("/QuickMeet/default/api/"+"0/"+ user, function(data){
         bdayStart.push(jsonData[i].days[0])
         bdayEnd.push(jsonData[i].days[jsonData[i].days.length -1])
     }
-    drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
+    drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd, null);
 } )
 
 //generate the First name of Member which is calendar owner
@@ -25,6 +25,15 @@ $('#list').html('<li>' + getFirst(user) + '</li>');
 //store all the user in this array
 var groupMember = []
 var interval = "0"
+
+
+var colors = ["rgba(0,114,229,0.5)","rgba(0,255,0,0.5)",
+              "rgba(255,255,0,0.5)","rgba(255,0,255,0.5)","rgba(255,102,0,0.5)",
+              "rgba(102,102,102,0.5)","rgba(102,51,0,0.5)"];
+var colorsBoolean = [false, false, false, false, false, false, false];
+var colorUser = ["test","test","test","test","test","test","test"];
+
+
 
 function getFirst (user){
     console.log(user)
@@ -35,26 +44,21 @@ function getFirst (user){
 
 
 
+
 //the function to add member to group calendar
 function add() {
-          ctx.clearRect(0,0,c.width,c.height);
-          emptyTable();
-          drawGrid();
-          drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
+         
           var newUser = $('#member').val();
           console.log('new user is ', newUser);
           if($.inArray(newUser, groupMember) !== -1){
               alert("the user  " + newUser + "  is already in the group!");
               return
           }
-            groupMember.push(newUser);
-            var memberString = ""
-            for(var i = 0; i < groupMember.length; i++){
-                memberString = memberString + "/" + groupMember[i];
-            }
+            //groupMember.push(newUser);
+            
 //get the newUser's data, and store the data in temporary
-            for(var i = 0; i < groupMember.length; i++){
-                $.get("/QuickMeet/default/api/0/"+ groupMember[i] + "/" + memberString  +".json"+ "?timeInterval=" +interval, function(realData) {
+            
+                $.get("/QuickMeet/default/api/0/"+ newUser +".json"+ "?timeInterval=" +interval, function(realData) {
                 var newTimeStart = []
                 var newTimeEnd = []
                 var newdayStart = []
@@ -65,11 +69,25 @@ function add() {
                     newdayStart.push(realData[i].days[0])
                     newdayEnd.push(realData[i].days[realData[i].days.length -1])
                 }
-                drawBox(newTimeStart, newTimeEnd, newdayStart, newdayEnd);
-              })
+
+                var i;
+            for(i = 0; i<colorsBoolean.length; i++){
+              if(colorsBoolean[i]==false){
+                colorUser[i] = "\"" + newUser + "\"";
+                drawBox(newTimeStart, newTimeEnd, newdayStart, newdayEnd, colorUser[i]);
+                colorsBoolean[i]=true;
+                console.log("Color: " + colorUser[i]);
+                break;
+              }
             }
+
+            groupMember.push(newUser);
+
             var str = $('#list').html();
             $('#list').html(str + '<li>' + newUser + "<button type='button'      onClick='deleteMember(this)'>delete</button>" + '</li>');
+              })
+            
+           
       }
 
 
@@ -97,7 +115,7 @@ function setTime() {
             }
             ctx.clearRect(0,0,c.width,c.height);
             drawGrid();
-            drawBox(newTimeStart, newTimeEnd, newdayStart, newdayEnd);
+            drawBox(newTimeStart, newTimeEnd, newdayStart, newdayEnd, null);
               
             for(var i = 0; i < newTimeStart.length - 1; i++){
                 var str = $('#result').html();
@@ -118,7 +136,7 @@ function refresh(){
         ctx.clearRect(0,0,c.width,c.height);
         emptyTable();
         drawGrid();
-        drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
+        drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd, null);
     
         $('li').empty();
         $('#list').html('<li>' + user + '</li>');
@@ -134,7 +152,9 @@ function refresh(){
                 newdayStart.push(realData[i].days[0])
                 newdayEnd.push(realData[i].days[realData[i].days.length -1])
             }
-            drawBox(newTimeStart, newTimeEnd, newdayStart, newdayEnd);
+
+            var temp = "\"" + realData[0].username+"\"";
+            drawBox(newTimeStart, newTimeEnd, newdayStart, newdayEnd, temp);
           })
           var str = $('#list').html();
           $('#list').html(str + '<li>' + groupMember[i] + "<button type='button' onClick='deleteMember(this)'>delete</button>" + '</li>');
@@ -217,7 +237,16 @@ function deleteMember(ele){
     var clone = $(ele).parent().clone();
     clone.children().remove();
     var message = clone.text();
+    for(i = 0; i<colorsBoolean.length; i++){
+      var username = "\""+message+"\"";
+      if(username==colorUser[i]){
+        colorsBoolean[i] = false;
+        colorUser[i] = "\"test\"";
+      }
+    }
     removeByValue(groupMember, message);
+    console.log("Group member: " + message);
+
     refresh();
 }
 
@@ -272,6 +301,7 @@ function get_Data(theUrl, callback)
     xmlHttp.open("GET", theUrl, true); // true for asynchronous 
     xmlHttp.send(null);
     //alert(xmlHttp.responseText)
+
 }
 
 
@@ -283,3 +313,4 @@ function get_data(URL){
     x.send( null );
     return x.response;
 }
+
