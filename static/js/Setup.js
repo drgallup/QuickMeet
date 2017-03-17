@@ -9,7 +9,6 @@ if (user == "" || user == null || user == undefined) {
 //Flag is set true for new user
 var flag = true;
 console.log(user); 
-//get_data("/QuickMeet/default/api/username.json");
 
 function setup(){
     //Fetch an random uuid and assign it to the user and give a random name for now
@@ -33,8 +32,6 @@ setup();
 
 if (flag == false) {
     console.log(user);
-    var data = get_data("/QuickMeet/default/api/"+ user +".json");
-//alert(data)
 //create array to store the events, days is a [][] array
     var btimeStart = []
     var btimeEnd = []
@@ -42,21 +39,27 @@ if (flag == false) {
     var bdayEnd = []
 
 //parse data
-    var jsonData = JSON.parse(data);
-    for (var i = 0; i < jsonData.length; i++) {
-
-        btimeStart.push(jsonData[i].startTime)
-        btimeEnd.push(jsonData[i].endTime)
-        bdayStart.push(jsonData[i].days[0])
-        bdayEnd.push(jsonData[i].days[jsonData[i].days.length -1])
-    //alert(startTime)
-    //alert(endTime)
-    //alert(startDay)
-    //alert(endDay)
+    get_Data("/QuickMeet/default/api/" + "0/"+ user +".json",function(data){
+        var jsonData = JSON.parse(data);
+        for (var i = 0; i < jsonData.length; i++) {
+            btimeStart.push(jsonData[i].startTime)
+            btimeEnd.push(jsonData[i].endTime)
+            bdayStart.push(jsonData[i].days[0])
+            bdayEnd.push(jsonData[i].days[jsonData[i].days.length -1])
     }
 
-//draw the box of the user
     drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd, null);
+})}
+
+
+function get_Data(theUrl, callback){     
+    var xmlHttp = new XMLHttpRequest();      
+    xmlHttp.onreadystatechange = function() {       
+    if (xmlHttp.readyState == 4 && xmlHttp.status == 200)      
+        callback(xmlHttp.responseText);       
+    }     
+    xmlHttp.open("GET", theUrl, true); // true for asynchronous        
+    xmlHttp.send(null);       
 }
 
 
