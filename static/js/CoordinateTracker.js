@@ -56,7 +56,7 @@ get_data("/QuickMeet/default/api/"+ user +".json",function(data){
         bdayStart.push(jsonData[i].days[0])
         bdayEnd.push(jsonData[i].days[jsonData[i].days.length -1])
     }
-    drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
+    drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd, null);
 })
 
 
@@ -97,7 +97,12 @@ function mouseUp(eve) {
 	var deletion = document.getElementById('deleteswitch').checked;
     if (mouseIsDown != false) {
         mouseIsDown = false;
+        //var pos = getMousePos(canvas, eve);
+        //endX = pos.x;
+        //endY = pos.y;
+        //drawSquare(); 
     }
+    //console.log("Inside mouseup");
     ctx.clearRect(0,0,c.width,c.height);
     drawGrid();
     if(deletion==false){
@@ -106,11 +111,12 @@ function mouseUp(eve) {
     if(deletion==true){
       findDeletion();
     }
-    drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
+    drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd, null);
 }
 
 // Tracks user's initial click
 function mouseDown(eve) {
+    
     mouseIsDown = true;
     var pos = getMousePos(canvas, eve);
     startX = endX = pos.x;
@@ -126,7 +132,7 @@ function mouseMove(eve) {
     ctx.clearRect(0,0,c.width,c.height);
     drawGrid();
     // mouse position 
-    drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
+    drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd, null);
     var pos = getMousePos(canvas, eve);
 
     // do drag box
@@ -135,15 +141,15 @@ function mouseMove(eve) {
         endY = pos.y;
         if(endX>maxX || endY>maxY){
         	ctx.clearRect(0,0,c.width,c.height);
-    		drawGrid();
-            drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
+    		drawGrid(); 
+            drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd, null);
         	maxX=endX;
         	maxY=endY;
         }
         if(endX<maxX || endY<maxY){
    	 	ctx.clearRect(0,0,c.width,c.height);
     	drawGrid();
-            drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd);
+            drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd, null);
         	maxX = endX;
         	maxY = endY;
 
@@ -268,7 +274,7 @@ function findDeletion(){
             counter = counter + 1;
             ctx.clearRect(0,0,c.width,c.height);
             drawGrid();
-            drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd); 
+            drawBox(btimeStart, btimeEnd, bdayStart, bdayEnd, null);
             console.log("Deleted");
             break;
         } 
@@ -382,3 +388,4 @@ function dayMap(x){
 function group(){
         window.location.href = "/QuickMeet/default/group?"+"username="+user
 }
+
