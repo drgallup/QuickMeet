@@ -44,6 +44,9 @@ def user():
 
 def group():
     return locals()
+
+def about():
+    return locals()
     
 
 @cache.action()
