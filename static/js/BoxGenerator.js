@@ -16,7 +16,7 @@ function drawBox(tStart, tEnd, dStart, dEnd){
         //lenth is the difference in times
         var Length = ((tEnd[i]-tStart[i])/100)*tileHeight;
 
-        ctx.fillStyle = "rgba(128,0,0,0.5)";
+        ctx.fillStyle = "rgba(128,100,150,0.6)";
         ctx.fillRect(X_coordinate, Y_coordinate, Width, Length);
 
     }
