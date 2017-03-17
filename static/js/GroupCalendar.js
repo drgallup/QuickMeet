@@ -36,10 +36,8 @@ var colorUser = ["test","test","test","test","test","test","test"];
 
 
 function getFirst (user){
-    console.log(user)
     var name = get_data("/QuickMeet/user/api/"+user+ ".json");
-    console.log(name.slice(1,-1));
-    return name.slice(1,-1);
+    return name;
 }
 
 
@@ -49,7 +47,6 @@ function getFirst (user){
 function add() {
          
           var newUser = $('#member').val();
-          console.log('new user is ', newUser);
           if($.inArray(newUser, groupMember) !== -1){
               alert("the user  " + newUser + "  is already in the group!");
               return
@@ -96,7 +93,6 @@ function setTime() {
           emptyTable();
           reloadTable()
           interval = $('#interval').val();
-          console.log('time interval is ', interval);
             var memberString = ""
             for(var i = 0; i < groupMember.length; i++){
                 memberString = memberString + "/" + groupMember[i];
@@ -264,7 +260,7 @@ function removeByValue(arr, val) {
 //return the calendar owner's edit page
 function returnEdit(){
         var user = getParameterByName("username")
-        window.location.href = "http://127.0.0.1:8000/Quickmeet/default/index?"+"username="+user
+        window.location.href = "/QuickMeet/default/index?"+"username="+user
 }
 
 
@@ -307,7 +303,6 @@ function get_Data(theUrl, callback)
 
 
 function get_data(URL){
-    console.log(URL);
     var x = new XMLHttpRequest();
     x.open( "GET", URL, false ); // false for synchronous request
     x.send( null );
